@@ -1,0 +1,82 @@
+import { EyeOff, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { useState } from "react";
+
+export default function SignUp() {
+  const [showpassword, setshowpassword] = useState();
+
+  return (
+    <div className="min-h-screen bg-[#e8eaed] flex items-center justify-center px-4">
+      <Card className="w-full max-w-md rounded-2xl shadow-md px-4">
+
+        <CardHeader className="text-center pb-4">
+          <CardTitle className="text-2xl font-bold text-gray-900 tracking-tight">
+            Login into your account
+          </CardTitle>
+          <CardDescription className="text-sm text-gray-500 mt-1">
+            Enter your details below to login your account
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="flex flex-col gap-5">
+
+          {/* Email */}
+          <div className="flex flex-col gap-1.5">
+            <Label className="text-sm font-semibold text-gray-800">
+              Email
+            </Label>
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              className="h-10 text-sm border-gray-300 rounded-md placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400"
+            />
+          </div>
+
+          {/* Password */}
+          <div className="flex flex-col gap-1.5">
+            <Label className="text-sm font-semibold text-gray-800">
+              Password
+            </Label>
+            <div className="relative">
+              <Input
+                type={showpassword ? "text" : "password"}
+                placeholder="Enter your Password"
+                className="h-10 text-sm border-gray-300 rounded-md placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400 pr-10"
+              />
+              <button onClick={() => setshowpassword(!showpassword)} type="button" className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer" >
+                {showpassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Sign Up Button */}
+          <Button className="w-full h-10 bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold rounded-md mt-1">
+            Login
+          </Button>
+
+          {/* Sign In Link */}
+          <p className="text-center text-sm text-gray-500">
+           Don't have an account?{" "}
+            <Link
+              to="/login"
+              className="text-gray-800 font-medium underline underline-offset-2 hover:text-gray-600 transition-colors"
+            >
+              Sign Up
+            </Link>
+          </p>
+
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
