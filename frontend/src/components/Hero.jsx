@@ -15,12 +15,12 @@ export default function HeroSection() {
             Read Articles that holds the gems of Nature
           </p>
           <div className="flex items-center gap-3 mt-1">
-            <Link to="/get-started">
+            <Link to="/signup">
               <Button className="bg-gray-900 text-white hover:bg-gray-700 px-5 h-10 text-sm font-medium rounded-md">
                 Get Started
               </Button>
             </Link>
-            <Link to="/learn-more">
+            <Link to="/about">
               <Button
                 variant="outline"
                 className=" text-gray-800 hover:bg-gray-200 px-5 h-10 text-sm font-medium rounded-md"

@@ -10,7 +10,10 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { use, useState } from "react";
+import { useState } from "react";
+import { toast} from "sonner";
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [showpassword, setshowpassword] = useState();
@@ -20,7 +23,7 @@ export default function SignUp() {
     email: "",
     password: ""
   });
-
+  const navigate = useNavigate()
   const handleChange = (e) => {
     const { name, value } = e.target
     setuser((prev) => ({
@@ -30,7 +33,35 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(user)
+
+    try {
+      const res = await axios.post('http://localhost:3000/api/v1/user/register', user, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+      })
+      
+      if (res.data.success) {
+        navigate('/login')
+        
+        toast.success(res.data.message)
+      }
+
+      console.log(res)
+      setuser({
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: ""
+      })
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }
+
+
+
   }
   return (
     <div className="min-h-screen bg-[#e8eaed] flex items-center justify-center px-4">

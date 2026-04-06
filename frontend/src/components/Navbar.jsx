@@ -1,9 +1,13 @@
-import { Search, Moon } from "lucide-react";
+import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FaMoon } from "react-icons/fa"
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
+  const {user} = useSelector(store => store.auth)
   return (
     <nav className="w-full border-b border-gray-200 bg-white px-6 py-3">
       <div className="mx-auto flex max-w-7xl items-center gap-6">
@@ -55,34 +59,46 @@ export default function Navbar() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3">
+
           {/* Dark Mode Toggle */}
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-9 w-9 rounded-full border-gray-800 bg-gray-900 text-white hover:bg-gray-700 hover:text-white"
-          >
-            <Moon className="h-4 w-4" />
+          <Button>
+            <FaMoon />
           </Button>
+          {
+            user ? <div className="ml-7 flex gap-3 items-center ">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
 
-          {/* Login */}
-          <Link to="/login">
-            <Button
-              variant="outline"
-              className="h-9 px-5 text-sm font-medium border-gray-800 text-gray-900 hover:bg-gray-100"
-            >
-              Login
-            </Button>
-          </Link>
-
-          {/* Signup */}
-          <Link to="/signup">
-            <Button className="h-9 px-5 text-sm font-medium bg-gray-900 text-white hover:bg-gray-700">
-              Signup
-            </Button>
-          </Link>
+              </Avatar>
+              <Link to="/logout">
+                <Button
+                  variant="outline"
+                  className="h-9 px-5 text-sm font-medium border-gray-800 text-gray-900 hover:bg-gray-100"
+                >
+                  Logout
+                </Button>
+              </Link>
+            </div> : <div className="ml-7 md:flex gap-2">
+              <Link to="/login">
+                <Button
+                  variant="outline"
+                  className="h-9 px-5 text-sm font-medium border-gray-800 text-gray-900 hover:bg-gray-100"
+                >
+                  Login
+                </Button>
+              </Link>
+              {/* Signup */}
+              < Link to="/signup">
+                <Button className="h-9 px-5 text-sm font-medium bg-gray-900 text-white hover:bg-gray-700">
+                  Signup
+                </Button>
+              </Link>
+            </div>
+          }
         </div>
 
       </div>
-    </nav>
+    </nav >
   );
 }

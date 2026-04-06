@@ -12,21 +12,21 @@ import Footer from './components/Footer';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <><Navbar /><Home /><Footer/></>
+    element: <><Navbar /><Home /><Footer /></>
   },
- {
+  {
     path: '/blog',
     element: <><Navbar /><Blog /><Footer /></>
   },
- {
+  {
     path: '/about',
     element: <><Navbar /><About /><Footer /></>
   },
- {
+  {
     path: '/login',
     element: <><Navbar /><Login /><Footer /></>
   },
- {
+  {
     path: '/signup',
     element: <><Navbar /><Signup /><Footer /></>
   },
@@ -35,7 +35,11 @@ const router = createBrowserRouter([
 ])
 const App = () => {
   return (
-  <RouterProvider router={router} />
+    <>
+      <RouterProvider router={router} />
+
+    </>
+
   )
 }
 
