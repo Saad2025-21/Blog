@@ -8,6 +8,7 @@ import Signup from './pages/Signup'
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Themeprovider from './components/themeprovider';
 
 const router = createBrowserRouter([
   {
@@ -36,8 +37,9 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <>
-      <RouterProvider router={router} />
-
+      <Themeprovider>
+        <RouterProvider router={router} />
+      </Themeprovider>
     </>
 
   )

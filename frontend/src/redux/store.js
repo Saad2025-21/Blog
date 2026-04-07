@@ -1,9 +1,11 @@
-import {configureStore} from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit"
 import authslice from "./authslice"
+import themeslice from "./themeslice"
 
 const store = configureStore({
     reducer: {
-        auth: authslice
+        auth: authslice,
+        theme: themeslice
     }
 })
 
