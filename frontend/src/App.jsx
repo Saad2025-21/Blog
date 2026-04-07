@@ -9,6 +9,7 @@ import Signup from './pages/Signup'
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Themeprovider from './components/themeprovider';
+import Dashboard from './pages/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,10 @@ const router = createBrowserRouter([
     path: '/signup',
     element: <><Navbar /><Signup /><Footer /></>
   },
-
+  {
+    path: '/dashboard',
+    element: <><Dashboard /></>
+  }
 
 ])
 const App = () => {

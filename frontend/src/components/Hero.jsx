@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-export default function HeroSection() {
+export default function Hero() {
   return (
     <section className="w-full bg-white px-6 py-16 overflow-hidden">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-10">
