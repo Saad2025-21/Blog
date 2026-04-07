@@ -13,9 +13,10 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { setUser } from "../redux/authslice";
+import { setLoading, setUser } from "../redux/authslice";
+import { Loader2 } from "lucide-react";
 
 export default function SignUp() {
   const [showpassword, setshowpassword] = useState();
@@ -23,6 +24,7 @@ export default function SignUp() {
     email: "",
     password: ""
   });
+  const { loading } = useSelector(store => store.auth)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -37,6 +39,7 @@ export default function SignUp() {
     e.preventDefault()
 
     try {
+      dispatch(setLoading(true))
       const res = await axios.post('http://localhost:3000/api/v1/user/login', user, {
         headers: {
           "Content-Type": "application/json"
@@ -57,7 +60,9 @@ export default function SignUp() {
       })
     } catch (error) {
       console.log(error)
-      toast.error(error.response.data.message)
+      toast.error(error.response?.data?.message || "Something went wrong")
+    } finally {
+      dispatch(setLoading(false))
     }
 
 
@@ -116,7 +121,13 @@ export default function SignUp() {
 
             {/* Sign Up Button */}
             <Button className="w-full h-10 bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold rounded-md mt-1">
-              Login
+              {
+                loading ? (
+                  <>
+                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                  </>
+                ) : ("Login")
+              }
             </Button>
 
             {/* Sign In Link */}

@@ -2,16 +2,61 @@ import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FaMoon, FaSun } from "react-icons/fa"
+import { FaMoon, FaSun, FaRegEdit } from "react-icons/fa"
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { useSelector, useDispatch } from "react-redux";
 import { toggletheme } from "../redux/themeslice";
+import { toast } from "sonner"
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
+import { setLoading, setUser } from "../redux/authslice";
+import {
+  User,
+  ChartColumnBig,
+  LogOut,
+  Loader2
+} from "lucide-react"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+
+
+} from "./ui/dropdown-menu";
+import { LiaCommentSolid } from 'react-icons/lia'
+
 
 export default function Navbar() {
   const { user } = useSelector(store => store.auth)
   const { theme } = useSelector(store => store.theme)
-
+  const { loading } = useSelector(store => store.auth)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const logouthandler = async (e) => {
+    e.preventDefault()
+    try {
+      dispatch(setLoading(true))
+      const res = await axios.get('http://localhost:3000/api/v1/user/logout', { withCredentials: true })
+      if (res.data.success) {
+        navigate('/')
+        dispatch(setUser(null))
+        toast.success(res.data.message)
+
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.res.data.message)
+    } finally {
+      dispatch(setLoading(false))
+    }
+  }
+
   return (
     <nav className="bg-white dark:bg-[rgb(16,23,42)] border-gray-200 dark:border-gray-700 px-6 py-3">
       <div className="mx-auto flex max-w-7xl items-center gap-6">
@@ -73,19 +118,60 @@ export default function Navbar() {
           </Button>
           {
             user ? <div className="ml-7 flex gap-3 items-center ">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
+              <DropdownMenu className="">
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 dark:bg-gray-800">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard/profile')}>
+                      <User />
+                      <span>Profile</span>
 
-              </Avatar>
-              <Link to="/logout">
-                <Button
-                  variant="outline"
-                  className="h-9 px-5 text-sm font-medium border-gray-800 text-gray-900 hover:bg-gray-100 dark:text-gray-200"
-                >
-                  Logout
-                </Button>
-              </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard/your-blog')}>
+                      <ChartColumnBig />
+                      <span>Your Blog</span>
+
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard/comments')}>
+                      <LiaCommentSolid />
+                      <span>Comments</span>
+
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard/write-blog')}>
+                      <FaRegEdit />
+                      <span>Write Blog</span>
+
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logouthandler}>
+                    <LogOut />
+                    <span>Log out</span>
+
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                variant="outline"
+                className="h-9 px-5 text-sm font-medium border-gray-800 text-gray-900 hover:bg-gray-100
+                   dark:text-gray-200"
+                onClick={logouthandler}
+              >
+                {
+                  loading ? (
+                    <>
+                      <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                    </>
+                  ) : ("logout")
+                }
+              </Button>
             </div> : <div className="ml-7 md:flex gap-2">
               <Link to="/login">
                 <Button
@@ -93,7 +179,7 @@ export default function Navbar() {
                   className="h-9 px-5 text-sm font-medium border-gray-500 hover:bg-gray-100 text-gray-800
                    dark:text-gray-200 dark:border-white-900"
                 >
-                  Login
+                  login
                 </Button>
               </Link>
               {/* Signup */}
