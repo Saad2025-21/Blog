@@ -93,7 +93,7 @@ export default function Navbar() {
             Home
           </Link>
           <Link
-            to="/blog"
+            to="/blogs"
             className="text-sm font-medium text-gray-800 hover:text-gray-500 transition-colors dark:text-gray-200"
           >
             Blogs
