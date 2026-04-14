@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ export default function Navbar() {
   const { loading } = useSelector(store => store.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const [searchterm, setsearchterm] = useState("");
   const logouthandler = async (e) => {
     e.preventDefault()
     try {
@@ -45,6 +46,7 @@ export default function Navbar() {
       const res = await axios.get('http://localhost:3000/api/v1/user/logout', { withCredentials: true })
       if (res.data.success) {
         navigate('/')
+        localStorage.removeItem("user")
         dispatch(setUser(null))
         toast.success(res.data.message)
 
@@ -57,6 +59,13 @@ export default function Navbar() {
     }
   }
 
+  const handlesearch = (e) => {
+    e.preventDefault()
+    if (searchterm.trim() !== '') {
+      navigate(`/search?q=${encodeURIComponent(searchterm)}`)
+      setsearchterm('')
+    }
+  }
   return (
     <nav className="bg-white dark:bg-[rgb(16,23,42)] border-gray-200 dark:border-gray-700 px-6 py-3">
       <div className="mx-auto flex max-w-7xl items-center gap-6">
@@ -76,9 +85,13 @@ export default function Navbar() {
             <Input
               type="text"
               placeholder="Search"
+              value={searchterm}
               className="h-full w-48 border-0 bg-transparent px-3 text-sm text-gray-600 placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+              onChange={(e) => setsearchterm(e.target.value)}
             />
-            <button className="flex h-full items-center justify-center bg-gray-900 px-3 hover:bg-gray-700 transition-colors">
+            <button className="flex h-full items-center justify-center bg-gray-900 px-3 hover:bg-gray-700 
+            transition-colors" onClick={handlesearch}
+              >
               <Search className="h-4 w-4 text-white" />
             </button>
           </div>

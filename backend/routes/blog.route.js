@@ -6,7 +6,7 @@ import { createblog, updateblog, getallblog, getpublishedblog, getownblogs, gett
 
 const router = express.Router()
 
-router.route('/').get(isAuthenticated, createblog)
+router.route('/').post(isAuthenticated, createblog)
 
 router.route('/:blogId').put(isAuthenticated, singleupload, updateblog)
 router.route('/:blogId').patch(togglepublishedblog)

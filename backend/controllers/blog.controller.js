@@ -1,5 +1,5 @@
 
-import  blog  from "../models/blog.model.js";
+import blog from "../models/blog.model.js";
 import comment from "../models/comment.model.js";
 import cloudinary from "../utils/cloudinary.js";
 import getDataUri from "../utils/dataUri.js";
@@ -87,7 +87,7 @@ export const getallblog = async (_, res) => {
 
 export const getpublishedblog = async (_, res) => {
     try {
-        const blogs = await blog.find({ isPublshed: true }).sort({ createdAt: -1 }).populate({
+        const blogs = await blog.find({ isPublished: true }).sort({ createdAt: -1 }).populate({
             path: 'author',
             select: 'firstname lastname photoUrl'
         }).populate({
@@ -116,19 +116,18 @@ export const getpublishedblog = async (_, res) => {
     }
 }
 
-export const togglepublishedblog = async (_, res) => {
+export const togglepublishedblog = async (req, res) => {
     try {
         const { blogId } = req.params
-
-        const blog = await blog.findById(blogId)
-        if (!blog) {
+        const Blog = await blog.findById(blogId)
+        if (!Blog) {
             return res.status(404).json({
                 message: "Blog not found!"
             });
         }
-        blog.isPublshed = !blog.isPublshed
-        await blog.save()
-        const statusMessage = blog.isPublished ? "Published" : "Unpublished";
+        Blog.isPublished = !Blog.isPublished
+        await Blog.save()
+        const statusMessage = Blog.isPublished ? "Published" : "Unpublished";
         return res.status(200).json({
             success: true,
             message: `Blog is ${statusMessage}`

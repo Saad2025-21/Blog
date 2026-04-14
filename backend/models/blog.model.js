@@ -30,7 +30,7 @@ const blogschema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: User
     }],
-    isPublshed: {
+    isPublished: {
         type: Boolean,
         default: false
     },

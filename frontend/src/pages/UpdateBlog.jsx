@@ -128,9 +128,9 @@ const UpdateBlog = () => {
           <h1 className=' text-4xl font-bold '>Basic Blog Information</h1>
           <p className=''>Make changes to your blogs here. Click publish when you're done.</p>
           <div className="space-x-2">
-            <Button onClick={() => togglepublish(selectblog?.isPublish ? "false" : "true")
+            <Button onClick={() => togglepublish(selectblog?.isPublished ? "false" : "true")
             }  >
-              {selectblog?.isPublish ? "Unpublish" : "Publish"}
+              {selectblog?.isPublished ? "Unpublish" : "Publish"}
             </Button>
             <Button variant="destructive" onClick={deleteblog}>Remove Course</Button>
           </div>

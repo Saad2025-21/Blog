@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -82,7 +82,8 @@ const Profile = () => {
           {/* image section */}
           <div className='flex flex-col items-center justify-center md:w-100'>
             <Avatar className="w-40 h-40 border-2">
-              <AvatarImage src={user?.photoUrl || userLogo} />
+              <AvatarImage src={user?.photoUrl} />
+              <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <h1 className='text-center font-semibold text-xl text-gray-700 dark:text-gray-300 my-3'>
               {user?.occupation || "Mern Stack Developer"}</h1>
@@ -98,8 +99,8 @@ const Profile = () => {
 
             </div>
 
-            <Dialog open={open} onOpenChange={setOpen} >
-              <Button onClick={() => setOpen(true)} >Edit Profile</Button>
+            <Dialog open={open} onOpenChange={setopen} >
+              <Button onClick={() => setopen(true)} >Edit Profile</Button>
               <DialogContent className="md:w-106.25 ">
                 <DialogHeader>
                   <DialogTitle className="text-center">Edit Profile</DialogTitle>
@@ -138,29 +139,6 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  <div className='flex gap-2'>
-                    <div>
-                      <Label>Facebook</Label>
-                      <Input id="facebook"
-                        name="facebook"
-                        value={input.facebook}
-                        onChange={changeEventHandler}
-                        placeholder="Enter a URL"
-                        className="col-span-3 text-gray-500"
-                      />
-                    </div>
-                    <div>
-                      <Label>Instagram</Label>
-                      <Input id="instagram"
-                        name="instagram"
-                        value={input.instagram}
-                        onChange={changeEventHandler}
-                        placeholder="Enter a URL"
-                        className="col-span-3 text-gray-500"
-                      />
-                    </div>
-                  </div>
-
                   <div>
                     <Label htmlFor="name" className="text-right">
                       Description
@@ -170,6 +148,19 @@ const Profile = () => {
                       value={input.bio}
                       onChange={changeEventHandler}
                       name="bio"
+                      placeholder="Enter a description"
+                      className="col-span-3 text-gray-500"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="name" className="text-right">
+                      Occupation
+                    </Label>
+                    <Textarea
+                      id="occupation"
+                      value={input.occupation}
+                      onChange={changeEventHandler}
+                      name="occupation"
                       placeholder="Enter a description"
                       className="col-span-3 text-gray-500"
                     />
@@ -187,22 +178,22 @@ const Profile = () => {
                     />
                   </div>
                 </div>
-                <DialogFooter>
-                  {
-                    loading ? <Button ><Loader2 className='mr-2 w-4 h-4 animate-spin' /> Please wait</Button> : <Button
-                      onClick={submitHandler} >Save Changes</Button>
-                  }
+              <DialogFooter>
+                {
+                  loading ? <Button ><Loader2 className='mr-2 w-4 h-4 animate-spin' /> Please wait</Button> : <Button
+                    onClick={submitHandler} >Save Changes</Button>
+                }
 
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
 
-          </div>
-        </Card>
       </div>
-      <TotalProperty />
-    </div>
+    </Card >
+      </div >
+  <TotalProperty />
+    </div >
   )
 }
 
