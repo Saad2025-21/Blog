@@ -22,7 +22,7 @@ app.use(cookieparser())
 app.use(express.urlencoded({ extended: true }))
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin:['blog-seven-gold-11.vercel.app','http://localhost:5173'],
     credentials: true
 }))
 
