@@ -117,11 +117,13 @@ export const updateProfile = async (req, res) => {
         const userId = req.id
         const { firstname, lastname, email, password, bio, occupation } = req.body
         const file = req.file
-        let cloudresponse 
-        
+        let cloudresponse
+
+
         if (file) {
             const fileuri = getDataUri(file)
-            await cloudinary.uploader.upload(fileuri)
+            const result = await cloudinary.uploader.upload(fileuri)
+            cloudresponse = result
         }
 
         const user = await User.findById(userId).select(-password)
@@ -137,7 +139,7 @@ export const updateProfile = async (req, res) => {
         if (email) user.email = email
         if (bio) user.bio = bio
         if (occupation) user.occupation = occupation
-        if (file && cloudresponse) user.photoUrl = cloudresponse.secure_url
+        if (file && cloudresponse) user.photoUrl = cloudresponse?.secure_url
 
 
 

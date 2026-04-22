@@ -62,7 +62,7 @@ const Profile = () => {
         },
         withCredentials: true,
       })
-
+      console.log(res.data)
       if (res.data.success) {
         setopen(false)
         toast.success(res.data.message)
@@ -178,21 +178,21 @@ const Profile = () => {
                     />
                   </div>
                 </div>
-              <DialogFooter>
-                {
-                  loading ? <Button ><Loader2 className='mr-2 w-4 h-4 animate-spin' /> Please wait</Button> : <Button
-                    onClick={submitHandler} >Save Changes</Button>
-                }
+                <DialogFooter>
+                  {
+                    loading ? <Button ><Loader2 className='mr-2 w-4 h-4 animate-spin' /> Please wait</Button> : <Button
+                      onClick={submitHandler} >Save Changes</Button>
+                  }
 
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
 
 
-      </div>
-    </Card >
+          </div>
+        </Card >
       </div >
-  <TotalProperty />
+      <TotalProperty />
     </div >
   )
 }

@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import axios from 'axios'
 import { Loader2 } from 'lucide-react'
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
@@ -16,7 +16,7 @@ const CreateBlog = () => {
     const [category, setCategory] = useState("");
     const [loading, setLoading] = useState(false);
     // const { blog } = useSelector(store => store.blog)
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const navigate = useNavigate()
     const getSelectedCategory = (value) => {
         setCategory(value)
@@ -24,23 +24,27 @@ const CreateBlog = () => {
 
     const createBlogHandler = async () => {
         try {
-            setLoading(true)
-            const res = await axios.post('http://localhost:3000/api/v1/blog/', { title, category }, {
+           setLoading(true)
+            const res = await axios.post('http://localhost:3000/api/v1/blog/create', { title, category }, {
                 headers: {
                     "Content-Type": "application/json",
                 },
                 withCredentials: true,
             })
             if (res.data.success) {
-                // dispatch(setBlog([...blog, res.data.blog]))
-                navigate(`/dashboard/write-blog/${res.data.blog._id}`)
+                const blogId = res.data.Blog?._id  
+                if (!blogId) {
+                    console.error("Blog ID missing in response:", res.data)
+                    return
+                }
+                navigate(`/dashboard/write-blog/${blogId}`)
                 toast.success(res.data.message)
             }
         } catch (error) {
             console.log(error)
             toast.error(error.response.data.message)
         } finally {
-            dispatch(setLoading(false))
+            setLoading(false)
         }
     }
 
@@ -63,11 +67,10 @@ const CreateBlog = () => {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Category</SelectLabel>
-                                    <SelectItem value="Web Development">Web Development</SelectItem>
-                                    <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
-                                    <SelectItem value="Blogging">Blogging</SelectItem>
-                                    <SelectItem value="Photography">Photography</SelectItem>
-                                    <SelectItem value="Cooking">Cooking</SelectItem>
+                                    <SelectItem value="Animal">Animal</SelectItem>
+                                    <SelectItem value="Birds">Birds</SelectItem>
+                                    <SelectItem value="Insects">Insects</SelectItem>
+                                     <SelectItem value="Plants">Plants</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

@@ -10,12 +10,20 @@ const BlogCard = ({ blog }) => {
     <div className="bg-white dark:bg-gray-800 dark:border-gray-600 p-5 rounded-2xl shadow-lg border hover:scale-105 transition-all">
       <img src={blog.thumbnail} alt="" className='rounded-lg' />
       <p className="text-sm  mt-2">
-        By {blog.author.firstname} | {blog.category} | {formattedDate}
+        By {blog.author.firstName} | {blog.category} | {formattedDate}
       </p>
       <h2 className="text-xl font-semibold  mt-1">{blog.title}</h2>
       <h3 className='text-gray-500 mt-1'>{blog.subtitle}</h3>
+      {/* <p className=" mt-3">{blog.description.substring(0, 100)}...</p> */}
+      {/* <div className="mt-3 flex flex-wrap gap-2">
+                {blog.tags.map((tag, index) => (
+                    <span key={index} className="text-xs bg-gray-100 px-2 py-1 rounded-md">
+                        {tag}
+                    </span>
+                ))}
+            </div> */}
       <Button onClick={() => navigate(`/blogs/${blog._id}`)} className="mt-4   px-4 py-2 rounded-lg text-sm ">
-        Read more
+        Read More
       </Button>
     </div>
   )

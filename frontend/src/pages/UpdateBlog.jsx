@@ -29,7 +29,7 @@ const UpdateBlog = () => {
   const selectblog = blog.find(blog => blog._id === id)
 
   const [loading, setLoading] = useState();
-  const [content, setcontent] = useState(selectblog.description);
+  const [content, setcontent] = useState('');
   const [publish, setpublish] = useState();
   const [blogData, setBlogData] = useState({
     title: selectblog?.title,
@@ -72,7 +72,7 @@ const UpdateBlog = () => {
     formData.append("file", blogData.thumbnail);
     try {
       setLoading(true)
-      const res = await axios.put(`https://mern-blog-ha28.onrender.com/api/v1/blog/${id}`, formData, {
+      const res = await axios.put(`http://localhost:3000/api/v1/blog/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
@@ -160,11 +160,10 @@ const UpdateBlog = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Category</SelectLabel>
-                  <SelectItem value="Web Development">Web Development</SelectItem>
-                  <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
-                  <SelectItem value="Blogging">Blogging</SelectItem>
-                  <SelectItem value="Photgraphy">Photgraphy</SelectItem>
-                  <SelectItem value="Cooking">Cooking</SelectItem>
+                  <SelectItem value="Animal">Animal</SelectItem>
+                  <SelectItem value="Birds">Birds</SelectItem>
+                  <SelectItem value="Insects">Insects</SelectItem>
+                  <SelectItem value="Plants">Plants</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

@@ -7,7 +7,7 @@ const Home = () => {
     <div >
       <Hero/>
       <RecentBlog/>
-      <PopularAuthors/>
+      {/* <PopularAuthors/> */}
     </div>
   )
 }

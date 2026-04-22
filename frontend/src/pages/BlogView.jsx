@@ -31,11 +31,12 @@ const BlogView = () => {
   const { comment } = useSelector(store => store.comment)
   const [liked, setLiked] = useState(selectedBlog?.likes.includes(user?._id) || false);
   const dispatch = useDispatch()
-  const clean = DOMPurify.sanitize(selectedBlog.description)
+  const clean = DOMPurify.sanitize(selectedBlog?.description)
+
 
   const likeOrdislikehandler = async () => {
     try {
-      const action = liked ? 'dislike' : 'like'
+      const action = liked ? 'dislike' : 'likes'
       const res = await axios.get(`http://localhost:3000/api/v1/blog/${selectedBlog?._id}/${action}`, { withCredentials: true })
       if (res.data.success) {
         const updatelike = liked ? bloglike - 1 : bloglike + 1
@@ -57,12 +58,13 @@ const BlogView = () => {
       toast.error(error.response.data.message)
     }
 
-    const changeTimeFormat = (isodate) => {
-      const date = new Date(isodate)
-      const options = { date: 'numeric', month: 'long', year: 'numeric' }
-      const formatteddate = date.toLocaleDateString('en-GB', options)
-      return formatteddate
-    }
+  }
+
+  const TimeFormat = (isodate) => {
+    const date = new Date(isodate)
+    const options = { date: 'numeric', month: 'long', year: 'numeric' }
+    const formatteddate = date.toLocaleDateString('en-GB', options)
+    return formatteddate
   }
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -73,36 +75,41 @@ const BlogView = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <Link to={'/'}><BreadcrumbLink >Home</BreadcrumbLink></Link>
+              <BreadcrumbLink href="/">
+                Home
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
 
 
             <BreadcrumbItem>
-              <Link to={'/blogs'}><BreadcrumbLink >Blogs</BreadcrumbLink></Link>
+              <BreadcrumbLink href='/blogs'>
+               Blogs   {/* only ONE <a> rendered */}
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{selectedBlog.title}</BreadcrumbPage>
+              <BreadcrumbPage>{selectedBlog?.title}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>
       {/* Blog Header */}
       <div className="my-8">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">{selectedBlog.title}</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-4">{selectedBlog?.title}</h1>
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center space-x-4">
             <Avatar>
-              <AvatarImage src={selectedBlog.author.photoUrl} alt="Author" />
+              <AvatarImage src={selectedBlog?.author.photoUrl} alt="Author" />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium">{selectedBlog.author.firstName} {selectedBlog.author.lastName}</p>
-              <p className="text-sm text-muted-foreground">{selectedBlog.author.occupation}</p>
+              <p className="font-medium">{selectedBlog?.author.firstName} {selectedBlog?.author.lastName}</p>
+              <p className="text-sm text-muted-foreground">{selectedBlog?.author.occupation}</p>
             </div>
           </div>
-          <div className="text-sm text-muted-foreground">Published on {changeTimeFormat(selectedBlog.createdAt)} • 8 min read</div>
+          <div className="text-sm text-muted-foreground">Published on
+            {TimeFormat(selectedBlog?.createdAt)} • 8 min read</div>
         </div>
       </div>
       {/* Featured Image */}
@@ -114,7 +121,7 @@ const BlogView = () => {
           height={500}
           className="w-full object-cover"
         />
-        <p className="text-sm text-muted-foreground mt-2 italic">{selectedBlog.subtitle}</p>
+        <p className="text-sm text-muted-foreground mt-2 italic">{selectedBlog?.subtitle}</p>
       </div>
       <p dangerouslySetInnerHTML={{ __html: clean }} ></p>
       <div>

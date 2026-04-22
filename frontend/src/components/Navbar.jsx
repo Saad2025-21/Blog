@@ -29,8 +29,9 @@ import {
 
 
 } from "./ui/dropdown-menu";
+import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
 import { LiaCommentSolid } from 'react-icons/lia'
-
+import Responsivemenu from './Responsivemenu'
 
 export default function Navbar() {
   const { user } = useSelector(store => store.auth)
@@ -38,8 +39,9 @@ export default function Navbar() {
   const { loading } = useSelector(store => store.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [searchterm, setsearchterm] = useState("");
-  const logouthandler = async (e) => {
+  const [openNav, setOpenNav] = useState(false)
+  const [searchTerm, setsearchTerm] = useState("");
+  const logoutHandler = async (e) => {
     e.preventDefault()
     try {
       dispatch(setLoading(true))
@@ -59,153 +61,110 @@ export default function Navbar() {
     }
   }
 
-  const handlesearch = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault()
     if (searchterm.trim() !== '') {
       navigate(`/search?q=${encodeURIComponent(searchterm)}`)
-      setsearchterm('')
+      setsearchTerm('')
     }
   }
+  const toggleNav = () => {
+    setOpenNav(!openNav)
+  }
   return (
-    <nav className="bg-white dark:bg-[rgb(16,23,42)] border-gray-200 dark:border-gray-700 px-6 py-3">
-      <div className="mx-auto flex max-w-7xl items-center gap-6">
+    <div className='py-2 fixed w-full bg-#0000000d  z-50 text-white'>
+      <div className='max-w-7xl mx-auto flex justify-between items-center px-4 md:px-0'>
+        {/* logo section */}
+        <div className='flex gap-7 items-center'>
+          <Link to={'/'}>
+            <div className='flex gap-2 items-center'>
 
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0 text-gray-800 dark:text-gray-200">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 dark:bg-white">
-          </div>
-          <span className="text-gray-900 dark:text-white">
-            NatBlog
-          </span>
-        </Link>
-
-        {/* Search Bar */}
-        <div className="flex items-center">
-          <div className="flex h-9 items-center rounded-md border border-gray-300 bg-gray-100 overflow-hidden">
-            <Input
-              type="text"
-              placeholder="Search"
-              value={searchterm}
-              className="h-full w-48 border-0 bg-transparent px-3 text-sm text-gray-600 placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-              onChange={(e) => setsearchterm(e.target.value)}
-            />
-            <button className="flex h-full items-center justify-center bg-gray-900 px-3 hover:bg-gray-700 
-            transition-colors" onClick={handlesearch}
-              >
-              <Search className="h-4 w-4 text-white" />
-            </button>
-          </div>
-        </div>
-
-        {/* Nav Links */}
-        <div className="ml-auto flex items-center gap-7">
-          <Link
-            to="/"
-            className="text-sm font-medium text-gray-800 hover:text-gray-500 transition-colors dark:text-gray-200"
-          >
-            Home
-          </Link>
-          <Link
-            to="/blogs"
-            className="text-sm font-medium text-gray-800 hover:text-gray-500 transition-colors dark:text-gray-200"
-          >
-            Blogs
-          </Link>
-          <Link
-            to="/about"
-            className="text-sm font-medium text-gray-800 hover:text-gray-500 transition-colors dark:text-gray-200"
-          >
-            About
-          </Link>
-        </div>
-
-        {/* Right Actions */}
-        <div className="flex items-center gap-3">
-
-          {/* Dark Mode Toggle */}
-          <Button onClick={() => dispatch(toggletheme())} >
-            {
-              theme === "light" ? <FaMoon /> : <FaSun />
-            }
-
-          </Button>
-          {
-            user ? <div className="ml-7 flex gap-3 items-center ">
-              <DropdownMenu className="">
-                <DropdownMenuTrigger asChild>
-                  <Avatar className="cursor-pointer">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 dark:bg-gray-800">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard/profile')}>
-                      <User />
-                      <span>Profile</span>
-
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard/your-blog')}>
-                      <ChartColumnBig />
-                      <span>Your Blog</span>
-
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard/comments')}>
-                      <LiaCommentSolid />
-                      <span>Comments</span>
-
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard/write-blog')}>
-                      <FaRegEdit />
-                      <span>Write Blog</span>
-
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logouthandler}>
-                    <LogOut />
-                    <span>Log out</span>
-
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button
-                variant="outline"
-                className="h-9 px-5 text-sm font-medium border-gray-800 text-gray-900 hover:bg-gray-100
-                   dark:text-gray-200"
-                onClick={logouthandler}
-              >
-                {
-                  loading ? (
-                    <>
-                      <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                    </>
-                  ) : ("logout")
-                }
-              </Button>
-            </div> : <div className="ml-7 md:flex gap-2">
-              <Link to="/login">
-                <Button
-                  variant="outline"
-                  className="h-9 px-5 text-sm font-medium border-gray-500 hover:bg-gray-100 text-gray-800
-                   dark:text-gray-200 dark:border-white-900"
-                >
-                  login
-                </Button>
-              </Link>
-              {/* Signup */}
-              < Link to="/signup">
-                <Button className="h-9 px-5 text-sm font-medium text-white dark:text-black dark:bg-white">
-                  Signup
-                </Button>
-              </Link>
+              <h1 className='font-light text-xl md:text-4xl'>NatBlog</h1>
             </div>
-          }
+          </Link>
+          <div className='relative hidden md:block rounded-4xl'>
+            <Input type="text"
+              placeholder="Search"
+              className=" bg-transparent w-50 hidden md:block"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Button className='absolute right-0 top-0 bg-transparent' onClick={handleSearch}><Search /></Button>
+          </div>
         </div>
+        {/* nav section */}
+        <nav className='flex md:gap-7 gap-4 items-center '>
+          <ul className='hidden md:flex gap-7 items-center text-[15px] font-extralight'>
+            <Link to={'/'} className="cursor-pointer"><li>Home</li></Link>
+            <Link to={'/blogs'} className={`cursor-pointer`}><li>Blogs</li></Link>
+            <Link to={'/about'} className={`cursor-pointer`}><li>About</li></Link>
+            {/* <NavLink to={'/write-blog'} className={`cursor-pointer`}><li>Write a Blog</li></NavLink> */}
+          </ul>
+          <div className='flex'>
+            <Button onClick={() => dispatch(toggletheme())} className="">
+              {
+                theme === 'light' ? <FaMoon /> : <FaSun />
+              }
 
+            </Button>
+            {
+              user ? <div className="ml-7 flex gap-3 items-center">
+                {/* <Link to={'/profile'}> */}
+                <DropdownMenu className="">
+                  <DropdownMenuTrigger asChild>
+                    <Avatar className="cursor-pointer">
+                      <AvatarImage src={user.photoUrl} />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 dark:bg-gray-800">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard/profile')}>
+                        <User />
+                        <span>Profile</span>
+
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard/your-blog')}>
+                        <ChartColumnBig />
+                        <span>Your Blog</span>
+
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard/comments')}>
+                        <LiaCommentSolid />
+                        <span>Comments</span>
+
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard/write-blog')}>
+                        <FaRegEdit />
+                        <span>Write Blog</span>
+
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logoutHandler}>
+                      <LogOut />
+                      <span>Log out</span>
+
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                {/* </Link> */}
+                <Button className="hidden md:block" onClick={logoutHandler}>Logout</Button>
+              </div> : <div className='ml-7 md:flex gap-2 '>
+                <Link to={'/login'}><Button>Login</Button></Link>
+                <Link className='hidden md:block' to={'/signup'}><Button>Signup</Button></Link>
+              </div>
+            }
+          </div>
+          {
+            openNav ? <HiMenuAlt3 onClick={toggleNav} className='w-7 h-7 md:hidden' /> : <HiMenuAlt1 onClick={toggleNav} className='w-7 h-7 md:hidden' />
+          }
+
+        </nav>
+        <Responsivemenu openNav={openNav} setOpenNav={setOpenNav} logoutHandler={logoutHandler} />
       </div>
-    </nav >
+    </div>
   );
 }

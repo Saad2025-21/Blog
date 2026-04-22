@@ -52,8 +52,10 @@ export const updateblog = async (req, res) => {
 
         let thumbnail;
         if (file) {
-            const fileuri = getDataUri(file)
-            thumbnail = await cloudinary.uploader.upload(fileuri)
+            const fileuri = getDataUri(file);
+            const result = await cloudinary.uploader.upload(fileuri);
+            thumbnail = result;
+            console.log(fileuri);
         }
 
         const updatedata = { title, subtitle, description, category, author: req.id, thumbnail: thumbnail?.secure_url }
@@ -143,8 +145,9 @@ export const togglepublishedblog = async (req, res) => {
 
 export const getownblogs = async (req, res) => {
     try {
-        const { userId } = req.params
 
+        const  userId  = req.id
+        console.log(userId)
         if (!userId) {
             return res.status(400).json({ message: "User ID is required." });
         }
@@ -152,15 +155,6 @@ export const getownblogs = async (req, res) => {
         const blogs = await blog.find({ author: userId }).populate({
             path: 'author',
             select: 'firstname lastname photoUrl'
-        }).populate({
-            path: 'comment',
-            sort: {
-                createdAt: -1
-            },
-            populate: {
-                path: 'userId',
-                select: 'firstname lastname photoUrl'
-            }
         })
 
         if (!blogs) {
@@ -203,16 +197,16 @@ export const likes = async (req, res) => {
     try {
         const blogId = req.params.id
         const userId_like = req.id
-        const blog = await blog.findById(blogId).populate({ path: 'likes' })
+        const Blog = await blog.findById(blogId).populate({ path: 'likes' })
 
-        if (!blog) {
+        if (!Blog) {
             return res.status(404).json({ message: 'Blog not found', success: false })
         }
 
-        await blog.updateOne({ $addtoset: { likes: userId_like } })
-        await blog.save()
+        await Blog.updateOne({ $addtoset: { likes: userId_like } })
+        await Blog.save()
 
-        return res.status(200).json({ message: 'Blog liked', blog, success: true });
+        return res.status(200).json({ message: 'Blog liked', Blog, success: true });
     } catch (error) {
         console.log(error);
 
@@ -223,14 +217,14 @@ export const dislikeBlog = async (req, res) => {
     try {
         const likeKrneWalaUserKiId = req.id;
         const blogId = req.params.id;
-        const blog = await Blog.findById(blogId);
-        if (!blog) return res.status(404).json({ message: 'post not found', success: false })
+        const Blog = await blog.findById(blogId);
+        if (!Blog) return res.status(404).json({ message: 'post not found', success: false })
 
 
-        await blog.updateOne({ $pull: { likes: likeKrneWalaUserKiId } });
-        await blog.save();
+        await Blog.updateOne({ $pull: { likes: likeKrneWalaUserKiId } });
+        await Blog.save();
 
-        return res.status(200).json({ message: 'Blog disliked', blog, success: true });
+        return res.status(200).json({ message: 'Blog disliked', Blog, success: true });
     } catch (error) {
         console.log(error);
 

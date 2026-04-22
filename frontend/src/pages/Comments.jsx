@@ -13,8 +13,9 @@ const Comments = () => {
             const res = await axios.get('http://localhost:3000/api/v1/comment/my-blogs/comments', {
                 withCredentials: true
             })
+            
             if (res.data.success) {
-                setallcomments(res.data.comment)
+                setallcomments(res.data.comments)
             }
         } catch (error) {
             console.log(error)
@@ -22,7 +23,6 @@ const Comments = () => {
     }
 
     useEffect(() => {
-
         getTotalcomments()
     }, []);
     return (

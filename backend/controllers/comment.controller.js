@@ -6,7 +6,7 @@ export const createcomment = async (req, res) => {
         const postId = req.params.id
         const userId_comment = req.id
         const { content } = req.body
-        console.log(postId)
+
         const blogs = await blog.findById(postId)
         if (!content) {
             return res.status(400).json({
@@ -15,13 +15,13 @@ export const createcomment = async (req, res) => {
             })
         }
 
-        await comment.create({
-            blogs,
+        const Comment = await comment.create({
+            content,
             userId: userId_comment,
             postId: postId
         })
 
-        await comment.populate({
+        const populatedcomment = await Comment.populate({
             path: 'userId',
             select: 'firstname lastname photoUrl'
         })
@@ -31,7 +31,7 @@ export const createcomment = async (req, res) => {
 
         return res.status(201).json({
             message: 'Comment Added',
-            comment,
+            comment: populatedcomment,
             success: true
         })
     } catch (error) {
@@ -87,10 +87,10 @@ export const editcomment = async (req, res) => {
         const commentid = req.params.id
         const Comment = await comment.findById(commentid)
 
-        if (!comment) {
+        if (!Comment) {
             return res.status(404).json({ message: 'Comment not found' });
         }
-        if (comment.userId.toString() !== userId) {
+        if (Comment.userId.toString() !== userId) {
             return res.status(403).json({ success: false, message: 'Not authorized to edit this comment' });
         }
 
@@ -148,7 +148,9 @@ export const getallcommentsonMyblog = async (req, res) => {
     try {
 
         const userId = req.id
+
         const myblogs = await blog.find({ author: userId }).select("_id")
+
 
         const blogid = myblogs.map(blog => blog._id)
 
@@ -161,7 +163,7 @@ export const getallcommentsonMyblog = async (req, res) => {
             });
         }
 
-        const comments = await comment.find({ postId: userId })
+        const comments = await comment.find({ postId: { $in: blogid } })
             .populate("userId", "firstname lastname email")
             .populate("postId", "title")
 

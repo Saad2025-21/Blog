@@ -8,53 +8,49 @@ import { setBlog } from '@/redux/blogSlice'
 export const blogJson = [
   {
     "id": 1,
-    "title": "The Ultimate Guide to Digital Marketing in 2025",
-    "author": "Rohit Singh",
-    "date": "2025-03-27",
-    "content": "Digital marketing is constantly evolving. In 2025, businesses must focus on AI-driven strategies, voice search optimization, and hyper-personalization. This guide covers the latest trends and strategies for success.",
-    "tags": ["digital marketing", "SEO", "social media", "PPC"],
-    "category": "Marketing",
+    "title": "How do Birds fly",
+    "author": "Saad Ansari",
+    "date": "2026-05-14",
+    "content": "a bird pulls its wings down using its strong pectoral (chest) muscles, then pushes them up again with its smaller supracoracoideus (wing) muscles",
+    "tags": ["Fly", "Birds", "wing",],
+    "category": "Birds",
     // "image": LMS
   },
   {
     "id": 2,
-    "title": "Building a Full-Stack LMS with MERN Stack",
-    "author": "Rohit Singh",
-    "date": "2025-03-27",
-    "content": "A step-by-step guide to building a Learning Management System (LMS) using React, Tailwind CSS, Node.js, Express.js, and MongoDB. Learn how to create courses, manage users, and process payments.",
-    "tags": ["MERN stack", "LMS", "React", "Node.js"],
-    "category": "Web Development",
-    // "image": LMS
+    "title": "Why is the Sky Blue",
+    "author": "Ayaan Khan",
+    "date": "2026-05-15",
+    "content": "the sky appears blue due to scattering of sunlight by the atmosphere, where shorter blue wavelengths are scattered more than others",
+    "tags": ["Sky", "Science", "Light"],
+    "category": "Nature"
   },
   {
     "id": 3,
-    "title": "Top 10 WordPress Plugins for 2025",
-    "author": "Rohit Singh",
-    "date": "2025-03-27",
-    "content": "WordPress remains the most popular CMS. This article covers the top 10 must-have plugins for security, SEO, performance, and customization in 2025.",
-    "tags": ["WordPress", "plugins", "SEO", "website optimization"],
-    "category": "WordPress",
-    // "image": LMS
+    "title": "How do Fish Breathe",
+    "author": "Zoya Shaikh",
+    "date": "2026-05-16",
+    "content": "fish use gills to extract oxygen from water as it passes over thin membranes filled with blood vessels",
+    "tags": ["Fish", "Water", "Gills"],
+    "category": "Animals"
   },
   {
     "id": 4,
-    "title": "How to Use APIs in Web Development",
-    "author": "Rohit Singh",
-    "date": "2025-03-27",
-    "content": "APIs play a crucial role in modern web development. Learn how to integrate third-party APIs, create RESTful APIs with Node.js, and use authentication methods like OAuth.",
-    "tags": ["APIs", "web development", "Node.js", "RESTful API"],
-    "category": "Web Development",
-    // "image": LMS
+    "title": "What Causes Rain",
+    "author": "Rehan Patel",
+    "date": "2026-05-17",
+    "content": "rain is caused when water vapor in the air cools and condenses into droplets that become heavy enough to fall to the ground",
+    "tags": ["Rain", "Weather", "Clouds"],
+    "category": "Environment"
   },
   {
     "id": 5,
-    "title": "Search Engine Optimization: The Complete Beginner’s Guide",
-    "author": "Rohit Singh",
-    "date": "2025-03-27",
-    "content": "SEO is vital for ranking higher on Google. This guide explains keyword research, on-page and off-page SEO, technical SEO, and the latest trends.",
-    "tags": ["SEO", "Google ranking", "keyword research", "backlinks"],
-    "category": "Marketing",
-    // "image": LMS
+    "title": "Why do Leaves Change Color",
+    "author": "Sara Khan",
+    "date": "2026-05-18",
+    "content": "leaves change color when chlorophyll breaks down, revealing pigments like carotenoids and anthocyanins",
+    "tags": ["Leaves", "Plants", "Seasons"],
+    "category": "Plants"
   }
 ]
 

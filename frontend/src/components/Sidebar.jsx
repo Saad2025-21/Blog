@@ -6,7 +6,7 @@ import {  FaRegEdit } from 'react-icons/fa';
 
 const Sidebar = () => {
   return (
-    <aside className='hidden md:block  dark:bg-gray-800 bg-white border-gray-300 dark:border-gray-600 0 w-60 space-y-2 h-screen z-10'>
+    <aside className='hidden md:block  dark:bg-gray-800 border-gray-300 dark:border-gray-600 0 w-60 space-y-5 h-screen z-10 pt-11'>
 
       <div className='text-center pt-10 px-3 space-y-2'>
         <NavLink to='/dashboard/profile' className={({ isActive }) => `text-2xl  ${isActive ? "bg-gray-800 dark:bg-gray-900 text-gray-200" : "bg-transparent"} flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-ful`}>

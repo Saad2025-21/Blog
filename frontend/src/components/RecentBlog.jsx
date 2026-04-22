@@ -48,7 +48,7 @@ const RecentBlog = () => {
         <h1 className='text-4xl font-bold pt-10 '>Recent Blogs</h1>
         <hr className=' w-24 text-center border-2 border-red-500 rounded-full' />
       </div>
-      <div className='max-w-7xl mx-auto flex gap-6'>
+      <div className='max-w-7xl mx-auto flex gap-15'>
         <div>
           <div className='mt-10 px-4 md:px-0'>
             {
@@ -80,14 +80,14 @@ const RecentBlog = () => {
             />
             <Button>Subscribe</Button>
           </div>
-        </div>
+        </div> 
         <div className='mt-7'>
           <h2 className="text-xl font-semibold mb-3">Suggested Blogs</h2>
           <ul className="space-y-3">
             {[
-              '10 Tips to Master React',
-              'Understanding Tailwind CSS',
-              'Improve SEO in 2024',
+              'The life of lion',
+              'How do birds fly',
+              'Plants that glow',
             ].map((title, idx) => (
               <li
                 key={idx}

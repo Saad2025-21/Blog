@@ -1,14 +1,14 @@
 import React from 'react'
-import {useSelector} from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 
-const ProctectedRoute = ({children}) => {
-  const {user} = useSelector(store=>store.auth)
-  const navigate = useNavigate()
+const ProctectedRoute = ({ children }) => {
+  const { user } = useSelector(store => store.auth)
+
   return (
     <div>
       {
-        user? children : navigate('/login')
+        user ? <>{children}</> : <Navigate to="/login" replace />
       }
     </div>
   )

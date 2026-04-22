@@ -17,18 +17,18 @@ const blogschema = new mongoose.Schema({
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: "User"
     },
     category: {
         type: String
     },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: "User"
     }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: "User"
     }],
     isPublished: {
         type: Boolean,
