@@ -55,7 +55,7 @@ export default function SignUp() {
         toast.success(res.data.message)
       }
 
-      console.log(res)
+      
       setuser({
         firstname: "",
         lastname: "",

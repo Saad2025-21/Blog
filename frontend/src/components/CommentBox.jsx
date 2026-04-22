@@ -71,10 +71,10 @@ const CommentBox = () => {
         },
         withCredentials: true
       });
-      console.log(res.data)
+     
       if (res.data.success) {
         let updatedCommentData
-        console.log(comment);
+    
 
         if (comment.length >= 1) {
           updatedCommentData = [...comment, res.data.comment]
@@ -103,7 +103,7 @@ const CommentBox = () => {
       })
       if (res.data.success) {
         const updatedCommentData = comment.filter((item) => item._id !== commentId)
-        console.log(updatedCommentData);
+       
 
         dispatch(setComment(updatedCommentData))
         toast.success(res.data.message)
@@ -127,7 +127,7 @@ const CommentBox = () => {
           }
         }
       );
-      console.log(res.data)
+      
       if (res.data.success) {
         const updatedCommentData = comment.map(item =>
           item._id === commentId ? { ...item, content: editedContent } : item

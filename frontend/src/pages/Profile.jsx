@@ -62,7 +62,7 @@ const Profile = () => {
         },
         withCredentials: true,
       })
-      console.log(res.data)
+  
       if (res.data.success) {
         setopen(false)
         toast.success(res.data.message)

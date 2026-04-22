@@ -80,7 +80,7 @@ const UpdateBlog = () => {
       })
       if (res.data.success) {
         toast.success(res.data.message)
-        console.log(blogData);
+      
       }
     } catch (error) {
       console.log(error);

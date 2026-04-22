@@ -55,7 +55,7 @@ export const updateblog = async (req, res) => {
             const fileuri = getDataUri(file);
             const result = await cloudinary.uploader.upload(fileuri);
             thumbnail = result;
-            console.log(fileuri);
+          
         }
 
         const updatedata = { title, subtitle, description, category, author: req.id, thumbnail: thumbnail?.secure_url }
@@ -147,7 +147,7 @@ export const getownblogs = async (req, res) => {
     try {
 
         const  userId  = req.id
-        console.log(userId)
+        
         if (!userId) {
             return res.status(400).json({ message: "User ID is required." });
         }
@@ -176,7 +176,7 @@ export const deleteblog = async (req, res) => {
         const authorId = req.id
         const Blog = await blog.findById(blogId)
 
-        console.log(blogId)
+       
         if (!Blog) {
             return res.status(400).json({ message: 'Blog not found', success: false })
         }
