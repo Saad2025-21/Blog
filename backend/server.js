@@ -17,14 +17,16 @@ dotenv.config()
 const app = express()
 const port = 3000
 
-app.use(express.json())
-app.use(cookieparser())
-app.use(express.urlencoded({ extended: true }))
-
 app.use(cors({
     origin:['https://blog-seven-gold-11.vercel.app','http://localhost:5173'],
     credentials: true
 }))
+
+app.use(express.json())
+app.use(cookieparser())
+app.use(express.urlencoded({ extended: true }))
+
+
 
 const _dirname = path.resolve()
 
