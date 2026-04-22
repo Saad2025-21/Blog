@@ -36,7 +36,7 @@ app.use("/api/v1/blog", blogroute)
 app.use("/api/v1/comment", commentroute)
 
 
-app.use(express.static(path.join(_dirname, "/frontend/dist")))
+// app.use(express.static(path.join(_dirname, "/frontend/dist")))
 
 // app.get("*", (_, res) => {
 //     res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"))
