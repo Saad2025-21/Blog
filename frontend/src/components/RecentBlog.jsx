@@ -30,7 +30,7 @@ const RecentBlog = () => {
   useEffect(() => {
     const getAllPublsihedBlogs = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v1/blog/getpublished-blog`, { withCredentials: true })
+        const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/blog/getpublished-blog`, { withCredentials: true })
         if (res.data.success) {
           dispatch(setBlog(res.data.blogs))
         }

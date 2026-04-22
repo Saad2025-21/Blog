@@ -45,7 +45,7 @@ export default function Navbar() {
     e.preventDefault()
     try {
       dispatch(setLoading(true))
-      const res = await axios.get('http://localhost:3000/api/v1/user/logout', { withCredentials: true })
+      const res = await axios.get('https://blog-spiy.onrender.com/api/v1/user/logout', { withCredentials: true })
       if (res.data.success) {
         navigate('/')
         localStorage.removeItem("user")

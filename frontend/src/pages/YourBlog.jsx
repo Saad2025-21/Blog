@@ -25,7 +25,7 @@ const YourBlog = () => {
 
   const getOwnBlog = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/v1/blog/get-own-blogs`, { withCredentials: true })
+      const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/blog/get-own-blogs`, { withCredentials: true })
       if (res.data.success) {
         dispatch(setBlog(res.data.blogs))
       }
@@ -43,7 +43,7 @@ const YourBlog = () => {
 
   const deleteBlog = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:3000/api/v1/blog/${id}/delete-blog`, { withCredentials: true })
+      const res = await axios.delete(`https://blog-spiy.onrender.com/api/v1/blog/${id}/delete-blog`, { withCredentials: true })
       if (res.data.success) {
         const updatedblog = blog.filter((blogitem) => blogitem._id !== id)
         dispatch(setBlog(updatedblog))

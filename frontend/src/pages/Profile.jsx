@@ -56,7 +56,7 @@ const Profile = () => {
     }
     try {
       setloading(true)
-      const res = await axios.put('http://localhost:3000/api/v1/user/profile/update', formdata, {
+      const res = await axios.put('https://blog-spiy.onrender.com/api/v1/user/profile/update', formdata, {
         headers: {
           "Content-Type": "applicaton/json"
         },

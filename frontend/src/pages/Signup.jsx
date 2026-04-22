@@ -42,7 +42,7 @@ export default function SignUp() {
 
     try {
       dispatch(setLoading(true))
-      const res = await axios.post('http://localhost:3000/api/v1/user/register', user, {
+      const res = await axios.post('https://blog-spiy.onrender.com/api/v1/user/register', user, {
         headers: {
           "Content-Type": "application/json"
         },

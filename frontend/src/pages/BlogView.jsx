@@ -37,7 +37,7 @@ const BlogView = () => {
   const likeOrdislikehandler = async () => {
     try {
       const action = liked ? 'dislike' : 'likes'
-      const res = await axios.get(`http://localhost:3000/api/v1/blog/${selectedBlog?._id}/${action}`, { withCredentials: true })
+      const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/blog/${selectedBlog?._id}/${action}`, { withCredentials: true })
       if (res.data.success) {
         const updatelike = liked ? bloglike - 1 : bloglike + 1
         setbloglike(updatelike)

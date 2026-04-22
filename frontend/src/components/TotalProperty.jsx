@@ -13,7 +13,7 @@ const TotalProperty = () => {
 
   const getOwnblogs = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api.v1/blog/get-own-blogs')
+      const res = await axios.get('https://blog-spiy.onrender.com/api.v1/blog/get-own-blogs')
       if (res.data.success) {
         dispatch(setBlog(res.data.blogs))
       }
@@ -23,7 +23,7 @@ const TotalProperty = () => {
   }
   const getTotalcomments = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api.v1/comment/my-blogs/comments', { withCredentials: true })
+      const res = await axios.get('https://blog-spiy.onrender.com/api.v1/comment/my-blogs/comments', { withCredentials: true })
       if (res.data.success) {
         settotalComments(res.data.totalComments)
       }
@@ -33,7 +33,7 @@ const TotalProperty = () => {
   }
   const getTotallikes = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/v1/blog/my-blogs/likes', { withCredentials: true })
+      const res = await axios.get('https://blog-spiy.onrender.com/api/v1/blog/my-blogs/likes', { withCredentials: true })
       if (res.data.success) {
         settotalLikes(res.data.totalLikes)
       }

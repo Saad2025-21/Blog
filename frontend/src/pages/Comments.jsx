@@ -10,7 +10,7 @@ const Comments = () => {
     const navigate = useNavigate()
     const getTotalcomments = async () => {
         try {
-            const res = await axios.get('http://localhost:3000/api/v1/comment/my-blogs/comments', {
+            const res = await axios.get('https://blog-spiy.onrender.com/api/v1/comment/my-blogs/comments', {
                 withCredentials: true
             })
             

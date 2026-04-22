@@ -5,7 +5,7 @@ const PopularAuthors = () => {
   const [popularUser, setpopularUser] = useState();
   const getalluser = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/v1/user/all-users')
+      const res = await axios.get('https://blog-spiy.onrender.com/api/v1/user/all-users')
       if (res.data.success) {
         setpopularUser(res.data.users)
       }

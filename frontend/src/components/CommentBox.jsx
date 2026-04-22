@@ -47,7 +47,7 @@ const CommentBox = () => {
   useEffect(() => {
     const getAllCommentsOfBlog = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v1/comment/${blogId}/comment/all`)
+        const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/comment/${blogId}/comment/all`)
         const data = res.data.comments
         dispatch(setComment(data))
       } catch (error) {
@@ -65,7 +65,7 @@ const CommentBox = () => {
     }
     try {
 
-      const res = await axios.post(`http://localhost:3000/api/v1/comment/${blogId}/create`, { content: content }, {
+      const res = await axios.post(`https://blog-spiy.onrender.com/api/v1/comment/${blogId}/create`, { content: content }, {
         headers: {
           "Content-Type": "application/json"
         },
@@ -98,7 +98,7 @@ const CommentBox = () => {
 
   const deleteComment = async (commentId) => {
     try {
-      const res = await axios.delete(`http://localhost:3000/api/v1/comment/${commentId}/delete`, {
+      const res = await axios.delete(`https://blog-spiy.onrender.com/api/v1/comment/${commentId}/delete`, {
         withCredentials: true
       })
       if (res.data.success) {
@@ -118,7 +118,7 @@ const CommentBox = () => {
   const editCommentHandler = async (commentId) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/v1/comment/${commentId}/edit`,
+        `https://blog-spiy.onrender.com/api/v1/comment/${commentId}/edit`,
         { content: editedContent },
         {
           withCredentials: true,
@@ -146,7 +146,7 @@ const CommentBox = () => {
   const likeCommentHandler = async (commentId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/comment/${commentId}/like`,
+        `https://blog-spiy.onrender.com/api/v1/comment/${commentId}/like`,
         {
           withCredentials: true,
         }
