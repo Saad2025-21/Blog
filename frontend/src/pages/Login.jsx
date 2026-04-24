@@ -44,7 +44,7 @@ export default function SignUp() {
         headers: {
           "Content-Type": "application/json"
         },
-        withCredentials: true
+      withCredentials:true
       })
 
       if (res.data.success) {
