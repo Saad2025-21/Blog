@@ -1,10 +1,10 @@
 import Hero from '@/components/Hero'
 import RecentBlog from '@/components/RecentBlog'
-import PopularAuthors from '@/components/PopularAuthors'
+// import PopularAuthors from '@/components/PopularAuthors'
 
 const Home = () => {
   return (
-    <div >
+    <div className='editorial-home bg-white'>
       <Hero/>
       <RecentBlog/>
       {/* <PopularAuthors/> */}

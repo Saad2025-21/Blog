@@ -170,43 +170,43 @@ const CommentBox = () => {
 
   return (
 
-    <div>
-      <div className='flex gap-4 mb-4 items-center'>
+    <section className='editorial-comment-box'>
+      <div className='comment-composer-author flex gap-4 mb-4 items-center'>
         <Avatar>
           <AvatarImage src={user.photoUrl} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <h3 className='font-semibold'>{user.firstname} {user.lastname}</h3>
       </div>
-      <div className='flex gap-3'>
+      <div className='comment-composer flex gap-3'>
         <Textarea
           placeholder="Leave a comment"
           value={content}
-          className="bg-gray-100 dark:bg-gray-800"
+          className="comment-input bg-gray-100 dark:bg-gray-800"
           onChange={changeEventHandler}
 
         />
         <Button onClick={commentHandler}><LuSend /></Button>
       </div>
       {
-        comment.length > 0 ? <div className='mt-7 bg-gray-100 dark:bg-gray-800 p-5 rounded-md'>
+        comment.length > 0 ? <div className='editorial-comment-list mt-7 bg-gray-100 dark:bg-gray-800 p-5 rounded-md'>
           {
             comment.map((item, index) => {
-              return <div key={index} className='mb-4'>
-                <div className='flex items-center justify-between'>
-                  <div className='flex gap-3 items-start'>
+              return <article key={index} className='editorial-comment-item mb-4'>
+                <div className='comment-item-main flex items-center justify-between'>
+                  <div className='comment-content-row flex gap-3 items-start'>
                     <Avatar>
                       <AvatarImage src={item?.userId?.photoUrl} />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
-                    <div className='mb-2 space-y-1 md:w-100'>
-                      <h1 className='font-semibold'>{item?.userId?.firstname} {item?.userId?.lastname} <span className='text-sm ml-2 font-light'>yesterday</span></h1>
+                    <div className='comment-content mb-2 space-y-1 md:w-100'>
+                      <h1 className='comment-author font-semibold'>{item?.userId?.firstname} {item?.userId?.lastname} <span className='text-sm ml-2 font-light'>yesterday</span></h1>
                       {editingCommentId === item?._id ? (
                         <>
                           <Textarea
                             value={editedContent}
                             onChange={(e) => setEditedContent(e.target.value)}
-                            className="mb-2 bg-gray-200 dark:bg-gray-700"
+                            className="comment-input mb-2 bg-gray-200 dark:bg-gray-700"
                           />
                           <div className="flex py-1 gap-2">
                             <Button size="sm" onClick={() => editCommentHandler(item._id)}>Save</Button>
@@ -214,10 +214,10 @@ const CommentBox = () => {
                           </div>
                         </>
                       ) : (
-                        <p className=''>{item?.content}</p>
+                        <p className='comment-text'>{item?.content}</p>
                       )}
                       {/* <p className=''>{item.content}</p> */}
-                      <div className='flex gap-5 items-center'>
+                      <div className='comment-actions flex gap-5 items-center'>
                         <div className='flex gap-2 items-center'>
                           <div
                             className='flex gap-1 items-center cursor-pointer'
@@ -255,24 +255,24 @@ const CommentBox = () => {
                 </div>
                 {
                   activeReplyId === item?._id &&
-                  <div className='flex gap-3 w-full px-10'>
+                  <div className='comment-reply-form flex gap-3 w-full px-10'>
                     <Textarea
                       placeholder="Reply here ..."
                       value={replyText}
-                      className="border-2 dark:border-gray-500 bg-gray-200 dark:bg-gray-700"
+                      className="comment-input border-2 dark:border-gray-500 bg-gray-200 dark:bg-gray-700"
                       onChange={(e) => setReplyText(e.target.value)}
 
                     />
                     <Button onClick={commentHandler}><LuSend /></Button>
                   </div>
                 }
-              </div>
+              </article>
             })
           }
         </div> : null
       }
 
-    </div>
+    </section>
   )
 }
 

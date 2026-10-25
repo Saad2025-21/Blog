@@ -1,6 +1,5 @@
 import BlogCard from '@/components/BlogCard'
 import React, { useEffect } from 'react'
-// import LMS from "../assets/LMS.png"
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setBlog } from '@/redux/blogSlice'
@@ -75,18 +74,19 @@ const Blog = () => {
 
 
   return (
-    <div className='pt-16'>
-      <div className='max-w-6xl mx-auto text-center flex flex-col space-y-4 items-center'>
-        <h1 className='text-4xl font-bold text-center pt-10 '>Our Blogs</h1>
-        <hr className=' w-24 text-center border-2 border-red-500 rounded-full' />
+    <main className='editorial-blog-page'>
+      <div className='blog-index-heading max-w-6xl mx-auto text-center flex flex-col space-y-4 items-center'>
+        <p className="editorial-kicker">From the journal</p>
+        <h1 className='text-4xl font-bold text-center'>Latest stories</h1>
+        <hr className='blog-index-rule' />
 
       </div>
-      <div className='max-w-6xl mx-auto grid gap-10 grid-cols-1 md:grid-cols-3 py-10 px-4 md:px-0'>
+      <div className='blog-index-grid max-w-6xl mx-auto grid gap-10 grid-cols-1 md:grid-cols-3'>
         {blog?.map((blog, index) => {
           return <BlogCard key={index} blog={blog} />
         })}
       </div>
-    </div>
+    </main>
   )
 }
 

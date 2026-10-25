@@ -1,7 +1,5 @@
-import React, { useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import BlogCardList from './BlogCardList';
-import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useNavigate } from 'react-router-dom';
@@ -9,24 +7,17 @@ import { setBlog } from '@/redux/blogSlice';
 import axios from 'axios';
 
 const tags = [
-  {
-    category: "Animal"
-  },
-  {
-    category: "Birds"
-  },
-  {
-    category: "Insects"
-  },
-  {
-    category: "Plants"
-  },
+  { category: "Animal" },
+  { category: "Birds" },
+  { category: "Insects" },
+  { category: "Plants" },
 ]
 
 const RecentBlog = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { blog } = useSelector(store => store.blog)
+
   useEffect(() => {
     const getAllPublsihedBlogs = async () => {
       try {
@@ -36,69 +27,128 @@ const RecentBlog = () => {
         }
       } catch (error) {
         console.log(error);
-
       }
     }
     getAllPublsihedBlogs()
   }, [])
 
-  return (
-    <div className='bg-gray-100 dark:bg-gray-800 pb-10'>
-      <div className='max-w-6xl mx-auto  flex flex-col space-y-4 items-center'>
-        <h1 className='text-4xl font-bold pt-10 '>Recent Blogs</h1>
-        <hr className=' w-24 text-center border-2 border-red-500 rounded-full' />
-      </div>
-      <div className='max-w-7xl mx-auto flex gap-15'>
-        <div>
-          <div className='mt-10 px-4 md:px-0'>
-            {
-              blog?.slice(0, 4).map((blog, index) => {
-                return <BlogCardList key={index} blog={blog}></BlogCardList>
-              })
-            }
-          </div>
+  const openArticle = (id) => navigate(`/blogs/${id}`)
 
+  const renderStory = (post, index, variant = '') => (
+    <article key={post._id || index} className={`journal-story ${variant}`}>
+      <button
+        type="button"
+        onClick={() => openArticle(post._id)}
+        className="journal-story-image"
+        aria-label={`Read ${post.title}`}
+      >
+        {post.thumbnail ? <img src={post.thumbnail} alt="" /> : <span className="story-image-empty" />}
+      </button>
+      <div className="journal-story-copy">
+        <div className="journal-story-meta">
+          <span>{post.category}</span>
+          {post.createdAt && <time>{new Date(post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</time>}
         </div>
-        <div className='bg-white hidden md:block dark:bg-gray-700 w-87.5 p-5 rounded-md mt-10'>
-          <h1 className='text-2xl font-semibold'>Popular categories</h1>
-          <div className='my-5 flex flex-wrap gap-3'>
-            {
-              tags.map((item, index) => {
-                return <Badge key={index} onClick={() => navigate(`/search?q=${item.category}`)} className="cursor-pointer">
-                  {item.category}
-                </Badge>
-              })
-            }
-          </div>
-          <h1 className='text-xl font-semibold '>Subscribe to Newsletter</h1>
-          <p className='text-sm text-gray-600 dark:text-gray-400'>Get the latest posts and updates delivered straight to your inbox.</p>
-          <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto mt-5">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              className="flex h-10 w-full rounded-md border bg-gray-200 dark:bg-gray-800 px-3 py-2 text-sm  text-gray-300"
-            />
-            <Button>Subscribe</Button>
-          </div>
-        </div> 
-        <div className='mt-7'>
-          <h2 className="text-xl font-semibold mb-3">Suggested Blogs</h2>
-          <ul className="space-y-3">
-            {[
-              'The life of lion',
-              'How do birds fly',
-              'Plants that glow',
-            ].map((title, idx) => (
-              <li
-                key={idx}
-                className="text-sm dark:text-gray-100  hover:underline cursor-pointer"
-              >
-                {title}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <h3>
+          <button type="button" onClick={() => openArticle(post._id)}>{post.title}</button>
+        </h3>
+        <p>{post.subtitle || post.content}</p>
+        <button type="button" onClick={() => openArticle(post._id)} className="editorial-read-link">
+          Read article <span aria-hidden="true">→</span>
+        </button>
       </div>
+    </article>
+  )
+
+  return (
+    <div className="journal-content">
+      <nav className="category-strip" aria-label="Browse categories">
+        {tags.map((item, index) => (
+          <button
+            key={item.category}
+            type="button"
+            onClick={() => navigate(`/search?q=${item.category}`)}
+            className="category-feature"
+          >
+            <span className="category-feature-icon">{String(index + 1).padStart(2, '0')}</span>
+            <span>
+              <strong>{item.category}</strong>
+              <small>Explore stories <span aria-hidden="true">→</span></small>
+            </span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="journal-main-grid">
+        <section className="latest-section" aria-labelledby="latest-heading">
+          <div className="section-heading">
+            <div>
+              <p className="editorial-kicker">Fresh from the press</p>
+              <h2 id="latest-heading">Latest articles</h2>
+            </div>
+            <span className="section-rule" />
+          </div>
+          <div className="latest-list">
+            {(blog || []).slice(0, 4).map((post, index) => renderStory(post, index))}
+          </div>
+        </section>
+
+        <aside className="journal-sidebar">
+          <section className="sidebar-block suggested-block">
+            <p className="editorial-kicker">A few good reads</p>
+            <h2>Suggested blogs</h2>
+            <ul className="suggested-list">
+              {['The life of lion', 'How do birds fly', 'Plants that glow'].map((title, index) => (
+                <li key={title}><span>{String(index + 1).padStart(2, '0')}</span>{title}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="sidebar-block newsletter-block">
+            <p className="editorial-kicker">The Sunday note</p>
+            <h2>Stories worth sharing.</h2>
+            <p className="newsletter-copy">Get the latest posts delivered to your inbox.</p>
+            <div className="newsletter-form">
+              <Input
+                type="email"
+                placeholder="Your email address"
+                className="h-10 w-full border border-gray-200 bg-white px-3 text-sm"
+              />
+              <Button className="newsletter-button">
+                Subscribe <span aria-hidden="true">→</span>
+              </Button>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <section className="secondary-stories" aria-labelledby="popular-heading">
+        <div className="section-heading">
+          <div>
+            <p className="editorial-kicker">Reader favorites</p>
+            <h2 id="popular-heading">Popular posts</h2>
+          </div>
+          <span className="section-rule" />
+        </div>
+        <div className="story-card-grid">
+          {(blog || []).slice(0, 3).map((post, index) => renderStory(post, index, 'story-card'))}
+        </div>
+      </section>
+
+      {(blog || []).length > 3 && (
+        <section className="secondary-stories editors-section" aria-labelledby="editors-heading">
+          <div className="section-heading">
+            <div>
+              <p className="editorial-kicker">Handpicked for you</p>
+              <h2 id="editors-heading">Editor’s picks</h2>
+            </div>
+            <span className="section-rule" />
+          </div>
+          <div className="story-card-grid">
+            {(blog || []).slice(3, 6).map((post, index) => renderStory(post, index + 3, 'story-card'))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

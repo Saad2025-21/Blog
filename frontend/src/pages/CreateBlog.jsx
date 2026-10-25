@@ -49,11 +49,10 @@ const CreateBlog = () => {
     }
 
     return (
-        <div className='p-4 md:pr-20 h-screen md:ml-80 pt-20 '>
-            <Card className="md:p-10 p-4 dark:bg-gray-800">
+        <main className='dashboard-page create-blog-page'>
+            <Card className="dashboard-card create-blog-card md:p-10 p-4 dark:bg-gray-800">
                 <h1 className='text-2xl font-bold'>Lets create blog</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex eius necessitatibus fugit vel distinctio architecto, ut ratione rem nobis eaque?</p>
-                <div className='mt-10 '>
+                <div className='mt-6 flex flex-col gap-3'>
                     <div>
                         <Label>Title</Label>
                         <Input type="text" placeholder="Your Blog Name" value={title} onChange={(e) => setTitle(e.target.value)} className="bg-white dark:bg-gray-700" />
@@ -84,7 +83,7 @@ const CreateBlog = () => {
                     </div>
                 </div>
             </Card>
-        </div>
+        </main>
     )
 }
 

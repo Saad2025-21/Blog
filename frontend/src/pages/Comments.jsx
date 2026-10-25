@@ -26,9 +26,9 @@ const Comments = () => {
         getTotalcomments()
     }, []);
     return (
-        <div className='pb-10 pt-20 md:ml-80 h-screen'>
-            <div className='max-w-6xl mx-auto mt-8 '>
-                <Card className="w-full p-5 space-y-2 dark:bg-gray-800">
+        <main className='dashboard-page comments-page'>
+            <div className='dashboard-page-inner'>
+                <Card className="dashboard-card comments-card w-full p-5 space-y-2 dark:bg-gray-800">
                     <Table>
                         <TableCaption>A list of your recent comments.</TableCaption>
                         <TableHeader >
@@ -63,7 +63,7 @@ const Comments = () => {
                     </Table>
                 </Card>
             </div>
-        </div>
+        </main>
     )
 }
 

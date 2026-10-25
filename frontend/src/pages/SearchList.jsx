@@ -20,11 +20,20 @@ const SearchList = () => {
     }, [pathname]);
 
     return (
-        <div className='pt-32'>
-            <div className='max-w-6xl mx-auto'>
+        <main className='find-page'>
+            <div className='find-page-inner'>
+                <header className='find-page-heading'>
+                    <p className='editorial-kicker'>The Nature Ledger · Search desk</p>
+                    <h1>Find a story</h1>
+                    <p className='find-page-description'>
+                        {query ? <>Stories matching <strong>“{query}”</strong></> : 'Browse stories from the journal.'}
+                    </p>
+                    <div className='find-page-rule'>
+                        <span>{blog_filter.length} {blog_filter.length === 1 ? 'story' : 'stories'}</span>
+                    </div>
+                </header>
 
-                <div className='grid grid-cols-3 gap-7 my-10'>
-
+                <div className='find-results'>
                     {blog_filter.length > 0 ? (
 
                         blog_filter.map((blog, index) => (
@@ -32,11 +41,15 @@ const SearchList = () => {
                         ))
 
                     ) : (
-                        <p className='text-gray-500'>No results found for "{query}"</p>
+                        <p className='find-empty-state'>
+                            <span className='editorial-kicker'>Nothing on this page</span>
+                            <strong>No stories found{query && <> for “{query}”</>}.</strong>
+                            <span>Try another topic or browse the journal for something new.</span>
+                        </p>
                     )}
                 </div>
             </div>
-        </div>
+        </main>
     )
 }
 

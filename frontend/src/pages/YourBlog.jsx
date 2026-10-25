@@ -59,9 +59,9 @@ const YourBlog = () => {
     getOwnBlog()
   }, []);
   return (
-    <div className='pb-10 pt-20 md:ml-80 h-screen'>
-      <div className='max-w-6xl mx-auto mt-8 '>
-        <Card className="w-full p-5 space-y-2 dark:bg-gray-800">
+    <main className='dashboard-page your-blog-page'>
+      <div className='dashboard-page-inner'>
+        <Card className="dashboard-card your-blog-card w-full p-5 space-y-2 dark:bg-gray-800">
 
           <Table>
             <TableCaption>A list of your recent blogs.</TableCaption>
@@ -103,7 +103,7 @@ const YourBlog = () => {
           </Table>
         </Card>
       </div>
-    </div>
+    </main>
   )
 }
 

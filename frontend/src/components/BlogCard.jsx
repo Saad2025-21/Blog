@@ -7,8 +7,8 @@ const BlogCard = ({ blog }) => {
   const date = new Date(blog.createdAt)
   const formattedDate = date.toLocaleDateString("en-GB");
   return (
-    <div className="bg-white dark:bg-gray-800 dark:border-gray-600 p-5 rounded-2xl shadow-lg border hover:scale-105 transition-all">
-      <img src={blog.thumbnail} alt="" className='rounded-lg' />
+    <div className="editorial-blog-card bg-white dark:bg-gray-800 dark:border-gray-600 p-5 border transition-all">
+      <img src={blog.thumbnail} alt="" />
       <p className="text-sm  mt-2">
         By {blog.author.firstName} | {blog.category} | {formattedDate}
       </p>

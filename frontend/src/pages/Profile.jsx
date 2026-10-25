@@ -19,7 +19,7 @@ import axios from 'axios'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { setUser } from '../redux/authslice'
-import TotalProperty from '@/components/TotalProperty'
+
 
 const Profile = () => {
   const dispatch = useDispatch()
@@ -76,9 +76,9 @@ const Profile = () => {
     }
   }
   return (
-    <div className='pt-20 md:ml-80 md:h-screen'>
-      <div className='max-w-6xl mx-auto mt-8 '>
-        <Card className=" flex md:flex-row flex-col gap-10 p-6 md:p-10 dark:bg-gray-800 mx-4 md:mx-0">
+    <main className='dashboard-page profile-page'>
+      <div className='dashboard-page-inner'>
+        <Card className="dashboard-card profile-card flex md:flex-row flex-col gap-10 p-6 md:p-10 dark:bg-gray-800 mx-4 md:mx-0">
           {/* image section */}
           <div className='flex flex-col items-center justify-center md:w-100'>
             <Avatar className="w-40 h-40 border-2">
@@ -101,7 +101,7 @@ const Profile = () => {
 
             <Dialog open={open} onOpenChange={setopen} >
               <Button onClick={() => setopen(true)} >Edit Profile</Button>
-              <DialogContent className="md:w-106.25 ">
+              <DialogContent className="md:w-106.25">
                 <DialogHeader>
                   <DialogTitle className="text-center">Edit Profile</DialogTitle>
                   <DialogDescription className="text-center">
@@ -191,9 +191,8 @@ const Profile = () => {
 
           </div>
         </Card >
-      </div >
-      <TotalProperty />
-    </div >
+      </div>
+    </main>
   )
 }
 

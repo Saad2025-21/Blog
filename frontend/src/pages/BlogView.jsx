@@ -70,8 +70,8 @@ const BlogView = () => {
     window.scrollTo(0, 0)
   }, [])
   return (
-    <div className='pt-14'>
-      <div className='max-w-6xl mx-auto p-10'>
+    <main className='blog-view-page'>
+      <div className='blog-breadcrumb max-w-6xl mx-auto'>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -95,10 +95,11 @@ const BlogView = () => {
         </Breadcrumb>
       </div>
       {/* Blog Header */}
-      <div className="my-8">
+      <header className="blog-view-header">
+        <p className="editorial-kicker">Nature · Field notes</p>
         <h1 className="text-4xl font-bold tracking-tight mb-4">{selectedBlog?.title}</h1>
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center space-x-4">
+        <div className="blog-view-byline flex items-center justify-between flex-wrap gap-4">
+          <div className="blog-view-author flex items-center space-x-4">
             <Avatar>
               <AvatarImage src={selectedBlog?.author.photoUrl} alt="Author" />
               <AvatarFallback>JD</AvatarFallback>
@@ -111,29 +112,29 @@ const BlogView = () => {
           <div className="text-sm text-muted-foreground">Published on
             {TimeFormat(selectedBlog?.createdAt)} • 8 min read</div>
         </div>
-      </div>
+      </header>
       {/* Featured Image */}
-      <div className="mb-8 rounded-lg overflow-hidden">
+      <figure className="blog-view-figure">
         <img
           src={selectedBlog?.thumbnail}
-          alt="Next.js Development"
+          alt={selectedBlog?.title || "Article illustration"}
           width={1000}
           height={500}
           className="w-full object-cover"
         />
         <p className="text-sm text-muted-foreground mt-2 italic">{selectedBlog?.subtitle}</p>
-      </div>
-      <p dangerouslySetInnerHTML={{ __html: clean }} ></p>
-      <div>
+      </figure>
+      <article className="blog-view-body" dangerouslySetInnerHTML={{ __html: clean }} />
+      <div className="blog-view-afterword">
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="blog-view-tags flex flex-wrap gap-2 mb-8">
           <Badge variant="secondary">Next.js</Badge>
           <Badge variant="secondary">React</Badge>
           <Badge variant="secondary">Web Development</Badge>
           <Badge variant="secondary">JavaScript</Badge>
         </div>
         {/* Engagement */}
-        <div className="flex items-center justify-between border-y dark:border-gray-800 border-gray-300 py-4 mb-8">
+        <div className="blog-view-engagement flex items-center justify-between border-y dark:border-gray-800 border-gray-300 py-4 mb-8">
           <div className="flex items-center space-x-4">
             <Button variant="ghost" onClick={likeOrdislikehandler} className="flex items-center gap-1">
               {
@@ -147,9 +148,9 @@ const BlogView = () => {
             </Button>
           </div>
         </div>
-        <CommentBox selectedBlog={selectedBlog} />
+        <div className="blog-view-comments"><CommentBox selectedBlog={selectedBlog} /></div>
       </div>
-    </div>
+    </main>
   )
 }
 

@@ -73,11 +73,11 @@ export default function SignUp() {
 
   }
   return (
-    <div className="min-h-screen bg-[#e8eaed] flex items-center justify-center px-4">
-      <Card className="w-full max-w-md rounded-2xl shadow-md px-4">
+    <div className="auth-page auth-signup min-h-screen flex items-center justify-center px-4">
+      <Card className="auth-panel auth-signup-panel w-full max-w-md px-4">
 
         <CardHeader className="text-center pb-4">
-          <CardTitle className="text-2xl font-bold text-gray-900 tracking-tight">
+          <CardTitle className="text-2xl font-bold text-gray-900 tracking-tight dark:text-white">
             Create an account
           </CardTitle>
           <CardDescription className="text-sm text-gray-500 mt-1">
@@ -86,11 +86,11 @@ export default function SignUp() {
         </CardHeader>
 
         <CardContent >
-          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+          <form className="flex flex-col gap-5 " onSubmit={handleSubmit}>
             {/* First Name & Last Name */}
-            <div className="flex gap-4">
+            <div className="flex gap-4 ">
               <div className="flex flex-col gap-1.5 w-1/2">
-                <Label className="text-sm font-semibold text-gray-800">
+                <Label className="text-sm font-semibold text-gray-800 dark:text-white">
                   First Name
                 </Label>
                 <Input
@@ -103,7 +103,7 @@ export default function SignUp() {
                 />
               </div>
               <div className="flex flex-col gap-1.5 w-1/2">
-                <Label className="text-sm font-semibold text-gray-800">
+                <Label className="text-sm font-semibold text-gray-800 dark:text-white">
                   Last Name
                 </Label>
                 <Input
@@ -119,7 +119,7 @@ export default function SignUp() {
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <Label className="text-sm font-semibold text-gray-800">
+              <Label className="text-sm font-semibold text-gray-800 dark:text-white">
                 Email
               </Label>
               <Input
@@ -134,7 +134,7 @@ export default function SignUp() {
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <Label className="text-sm font-semibold text-gray-800">
+              <Label className="text-sm font-semibold text-gray-800 dark:text-white">
                 Password
               </Label>
               <div className="relative">
@@ -170,7 +170,7 @@ export default function SignUp() {
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-gray-800 font-medium underline underline-offset-2 hover:text-gray-600 transition-colors"
+                className="text-gray-800 dark:text-white font-medium underline underline-offset-2 hover:text-gray-600 transition-colors"
               >
                 Login
               </Link>

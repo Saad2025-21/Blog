@@ -1,22 +1,15 @@
-import { EyeOff, Eye } from "lucide-react";
+import { EyeOff, Eye, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { setLoading, setUser } from "../redux/authslice";
-import { Loader2 } from "lucide-react";
+import { FaGoogle, FaApple, FaFacebookF } from "react-icons/fa";
 
 export default function SignUp() {
   const [showpassword, setshowpassword] = useState();
@@ -72,20 +65,19 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen bg-[#e8eaed] flex items-center justify-center px-4">
-      <Card className="w-full max-w-md rounded-2xl shadow-md px-4">
+    <div className="auth-page auth-login min-h-screen flex items-center justify-center p-6">
+      <div className="auth-panel w-full max-w-5xl bg-white overflow-hidden flex flex-col md:flex-row">
 
-        <CardHeader className="text-center pb-4">
-          <CardTitle className="text-2xl font-bold text-gray-900 tracking-tight">
+        {/* Left: form */}
+        <div className="auth-form-panel w-full md:w-1/2 bg-white p-10 md:p-14 flex flex-col justify-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
             Login into your account
-          </CardTitle>
-          <CardDescription className="text-sm text-gray-500 mt-1">
+          </h1>
+          <p className="text-sm text-gray-500 mt-3 mb-8">
             Enter your details below to login your account
-          </CardDescription>
-        </CardHeader>
+          </p>
 
-        <CardContent >
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Email */}
             <div className="flex flex-col gap-1.5">
               <Label className="text-sm font-semibold text-gray-800">
@@ -95,7 +87,7 @@ export default function SignUp() {
                 type="email"
                 name="email"
                 placeholder="Enter your email"
-                className="h-10 text-sm border-gray-300 rounded-md placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400"
+                className="h-11 text-sm bg-white border-0 rounded-xl shadow-sm placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400"
                 value={user.email}
                 onChange={handleChange}
               />
@@ -111,7 +103,7 @@ export default function SignUp() {
                   type={showpassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter your Password"
-                  className="h-10 text-sm border-gray-300 rounded-md placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400 pr-10"
+                  className="h-11 text-sm bg-white border-0 rounded-xl shadow-sm placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-400 pr-10"
                   value={user.password}
                   onChange={handleChange}
                 />
@@ -119,21 +111,26 @@ export default function SignUp() {
                   {showpassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              <Link to="/forgot-password" className="text-xs text-gray-500 hover:text-gray-700 self-end mt-1">
+                Recovery Password
+              </Link>
             </div>
 
-            {/* Sign Up Button */}
-            <Button className="w-full h-10 bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold rounded-md mt-1">
+            {/* Sign In Button */}
+            <Button className="w-full h-11 bg-[#ccf0ff] text-[#33c2ff]  hover:bg-[#33c2ff] hover:text-white text-sm font-semibold rounded-xl mt-1">
               {
                 loading ? (
                   <>
                     <Loader2 className="mr-2 w-4 h-4 animate-spin" />
                   </>
-                ) : ("Login")
+                ) : ("Sign In")
               }
             </Button>
 
-            {/* Sign In Link */}
-            <p className="text-center text-sm text-gray-500">
+          
+
+            {/* Sign Up Link */}
+            <p className="text-center text-sm text-gray-500 mt-2">
               Don't have an account?{" "}
               <Link
                 to="/signup"
@@ -143,8 +140,9 @@ export default function SignUp() {
               </Link>
             </p>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+
+      </div>
     </div>
   );
 }
