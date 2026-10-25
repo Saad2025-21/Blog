@@ -1,10 +1,9 @@
 import mongoose from "mongoose"
-import User from './user.model.js';
 
 const blogschema = new mongoose.Schema({
     title: {
         type: String,
-        require: true
+        required: true
     },
     subtitle: {
         type: String
@@ -28,7 +27,7 @@ const blogschema = new mongoose.Schema({
     }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "comment"
     }],
     isPublished: {
         type: Boolean,

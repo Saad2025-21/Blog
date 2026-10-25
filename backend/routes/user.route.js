@@ -9,6 +9,6 @@ router.route("/register").post(register)
 router.route("/login").post(login)
 router.route("/logout").get(logout)
 router.route("/profile/update").put(isAuthenticated, singleupload, updateProfile)
-router.get('/all-users', getAlluser);
+router.get('/all-users', isAuthenticated,getAlluser);
 
 export default router;
