@@ -13,7 +13,7 @@ export const createcomment = async (req, res) => {
         .json({ message: "Blog not found", success: false });
     }
 
-    if (!content) {
+    if (!content || !content.trim()) {
       return res.status(400).json({
         message: "Text is required",
         success: false,
@@ -21,7 +21,7 @@ export const createcomment = async (req, res) => {
     }
 
     const Comment = await comment.create({
-      content,
+      content: content.trim(),
       userId: req.id,
       postId: postId,
     });
@@ -168,10 +168,15 @@ export const likecomment = async (req, res) => {
 
     await Comment.save();
 
+    const updatedComment = await Comment.populate({
+      path: "userId",
+      select: "firstname lastname photoUrl",
+    });
+
     res.status(200).json({
       success: true,
       message: alreadyliked ? "Comment unliked" : "Comment liked",
-      updatedComment: Comment,
+      updatedComment,
     });
   } catch (error) {
     console.error(error);

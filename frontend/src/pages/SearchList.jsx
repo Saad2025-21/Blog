@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import api from '@/lib/axios';
+import { setBlog } from '@/redux/blogSlice';
 import { useLocation } from 'react-router-dom';
 import BlogCard from '../components/BlogCard';
 
@@ -9,6 +11,7 @@ const SearchList = () => {
     const params = new URLSearchParams(location.search)
     const query = params.get('q') || ''
     const { blog } = useSelector(store => store.blog)
+    const dispatch = useDispatch()
 
     const blog_filter = (blog || []).filter((item) => {
         return item.title?.toLowerCase().includes(query.toLowerCase()) ||
@@ -17,7 +20,14 @@ const SearchList = () => {
     })
     useEffect(() => {
         window.scrollTo(0, 0)
-    }, [pathname]);
+        if (!blog.length) {
+            api.get('/blog/getpublished-blog')
+                .then((res) => {
+                    if (res.data.success) dispatch(setBlog(res.data.blogs))
+                })
+                .catch((error) => console.log(error))
+        }
+    }, [pathname, blog.length, dispatch]);
 
     return (
         <main className='find-page'>
@@ -36,8 +46,8 @@ const SearchList = () => {
                 <div className='find-results'>
                     {blog_filter.length > 0 ? (
 
-                        blog_filter.map((blog, index) => (
-                            <BlogCard key={index} blog={blog} />
+                        blog_filter.map((blog) => (
+                            <BlogCard key={blog._id} blog={blog} />
                         ))
 
                     ) : (

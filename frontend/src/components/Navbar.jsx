@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const NAV_LINKS = [
   { label: "Home", path: "/" },
@@ -11,10 +11,7 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const profile = JSON.parse(localStorage.getItem("user"));
-  
-  const {user} = useSelector(store => store.auth)
-  console.log(user)
+  const { user } = useSelector(store => store.auth)
   return (
     <header className="editorial-nav w-full">
       <div className="editorial-header-inner">
@@ -54,13 +51,13 @@ export default function Navbar() {
               </a>
             ))}
           </nav>
-          {profile ? (
+          {user ? (
             <div className="editorial-auth-links hidden md:flex">
-              <a href="/login" className="editorial-nav-link">
-                hi
+              <a href="/dashboard/profile" className="editorial-nav-link">
+                {user.firstname}
               </a>
-              <a href="/signup" className="editorial-signup">
-                hi
+              <a href="/dashboard/your-blog" className="editorial-signup">
+                My blogs
               </a>
             </div>
           ) : (
@@ -93,7 +90,7 @@ export default function Navbar() {
             {NAV_LINKS.map((link) => (
               <a
                 key={link.label}
-                href={link.href}
+                href={link.path}
                 onClick={() => setIsOpen(false)}
                 className="editorial-mobile-link"
               >
@@ -102,20 +99,17 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="editorial-mobile-actions">
-            <a
-              href="#login"
-              onClick={() => setIsOpen(false)}
-              className="editorial-mobile-link"
-            >
-              Log in
-            </a>
-            <a
-              href="#signup"
-              onClick={() => setIsOpen(false)}
-              className="editorial-mobile-signup"
-            >
-              Sign up
-            </a>
+            {user ? (
+              <>
+                <a href="/dashboard/profile" onClick={() => setIsOpen(false)} className="editorial-mobile-link">Profile</a>
+                <a href="/dashboard/your-blog" onClick={() => setIsOpen(false)} className="editorial-mobile-signup">My blogs</a>
+              </>
+            ) : (
+              <>
+                <a href="/login" onClick={() => setIsOpen(false)} className="editorial-mobile-link">Log in</a>
+                <a href="/signup" onClick={() => setIsOpen(false)} className="editorial-mobile-signup">Sign up</a>
+              </>
+            )}
           </div>
         </div>
       )}

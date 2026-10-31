@@ -3,16 +3,14 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { Eye } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from 'react'
-import axios from "axios"
+import api from '@/lib/axios'
 
 const Comments = () => {
     const [allcomments, setallcomments] = useState([]);
     const navigate = useNavigate()
     const getTotalcomments = async () => {
         try {
-            const res = await axios.get('https://blog-spiy.onrender.com/api/v1/comment/my-blogs/comments', {
-                withCredentials: true
-            })
+            const res = await api.get('/comment/my-blogs/comments')
             
             if (res.data.success) {
                 setallcomments(res.data.comments)
@@ -23,6 +21,7 @@ const Comments = () => {
     }
 
     useEffect(() => {
+        // External API request is synchronized through component state.
         getTotalcomments()
     }, []);
     return (
@@ -42,19 +41,19 @@ const Comments = () => {
                         </TableHeader>
                         <TableBody>
                             {
-                                allcomments?.map((comment, index) => (
-                                    <TableRow key={index} >
+                                allcomments?.map((comment) => (
+                                    <TableRow key={comment._id} >
                                         <TableCell className="flex gap-4 items-center">
-                                            {comment.postId.title}
+                                            {comment.postId?.title || "Deleted blog"}
                                         </TableCell>
                                         <TableCell>
                                             {comment.content}
                                         </TableCell>
                                         <TableCell>
-                                            {comment.userId.firstname}
+                                            {comment.userId?.firstname || "Unknown user"}
                                         </TableCell>
                                         <TableCell className="text-right flex gap-3 items-center justify-center">
-                                            <Eye className='cursor-pointer' onClick={() => navigate(`/blogs/${comment.postId._id}`)} />
+                                            <Eye className={`cursor-pointer ${!comment.postId ? 'opacity-40 pointer-events-none' : ''}`} onClick={() => comment.postId && navigate(`/blogs/${comment.postId._id}`)} />
                                         </TableCell>
                                     </TableRow>
                                 ))

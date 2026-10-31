@@ -7,11 +7,11 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+import api from "@/lib/axios";
 import { setLoading, setUser } from "../redux/authslice";
 import { FaGoogle, FaApple, FaFacebookF } from "react-icons/fa";
 
-export default function SignUp() {
+export default function Login() {
   const [showpassword, setshowpassword] = useState();
   const [user, setuser] = useState({
     email: "",
@@ -33,12 +33,8 @@ export default function SignUp() {
 
     try {
       dispatch(setLoading(true))
-      const res = await axios.post('https://blog-spiy.onrender.com/api/v1/user/login', user, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-      withCredentials:true
-      })
+      const res = await api.post('/user/login', user)
+
 
       if (res.data.success) {
 

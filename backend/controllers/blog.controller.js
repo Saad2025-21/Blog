@@ -82,7 +82,7 @@ export const getpublishedblog = async (_, res) => {
       .sort({ createdAt: -1 })
       .populate({
         path: "author",
-        select: "firstname lastname photoUrl",
+        select: "firstname lastname photoUrl occupation",
       })
       .populate({
         path: "comments",

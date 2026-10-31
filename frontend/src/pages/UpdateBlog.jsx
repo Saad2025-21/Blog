@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Select,
   SelectContent,
@@ -15,9 +15,9 @@ import { Button } from '@/components/ui/button'
 import JoditEditor from 'jodit-react';
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
+import api from '@/lib/axios'
 import { toast } from 'sonner'
-import { setBlog } from '@/redux/blogSlice'
+import { setYourBlog } from '@/redux/blogSlice'
 
 const UpdateBlog = () => {
   const editor = useRef(null)
@@ -25,11 +25,11 @@ const UpdateBlog = () => {
   const navigate = useNavigate()
   const params = useParams()
   const id = params.blogId
-  const { blog } = useSelector(store => store.blog)
+  const { yourblog: blog } = useSelector(store => store.blog)
   const selectblog = blog.find(blog => blog._id === id)
 
   const [loading, setLoading] = useState();
-  const [content, setcontent] = useState('');
+  const [content, setcontent] = useState(selectblog?.description || '');
   const [publish, setpublish] = useState();
   const [blogData, setBlogData] = useState({
     title: selectblog?.title,
@@ -39,6 +39,30 @@ const UpdateBlog = () => {
     thumbnail: selectblog?.thumbnail,
   });
   const [previewThumbnail, setpreviewThumbnail] = useState(selectblog?.thumbnail);
+
+  useEffect(() => {
+    if (!blog.length) {
+      api.get('/blog/get-own-blogs')
+        .then((res) => {
+          if (res.data.success) dispatch(setYourBlog(res.data.blogs))
+        })
+        .catch((error) => toast.error(error.response?.data?.message || "Failed to load blogs"))
+    }
+  }, [blog.length, dispatch])
+
+  useEffect(() => {
+    if (selectblog) {
+      setcontent(selectblog.description || '')
+      setBlogData({
+        title: selectblog.title,
+        subtitle: selectblog.subtitle,
+        description: selectblog.description || '',
+        category: selectblog.category,
+        thumbnail: selectblog.thumbnail,
+      })
+      setpreviewThumbnail(selectblog.thumbnail)
+    }
+  }, [selectblog])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +81,7 @@ const UpdateBlog = () => {
     if (file) {
       setBlogData({ ...blogData, thumbnail: file });
       const filedata = new FileReader()
-      filedata.onloadend(() => setpreviewThumbnail(filedata.result))
+      filedata.onloadend = () => setpreviewThumbnail(filedata.result)
       filedata.readAsDataURL(file)
     }
 
@@ -69,34 +93,29 @@ const UpdateBlog = () => {
     formData.append("subtitle", blogData.subtitle);
     formData.append("description", content);
     formData.append("category", blogData.category);
-    formData.append("file", blogData.thumbnail);
+    if (blogData.thumbnail instanceof File) {
+      formData.append("file", blogData.thumbnail);
+    }
     try {
       setLoading(true)
-      const res = await axios.put(`https://blog-spiy.onrender.com/api/v1/blog/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
+      const res = await api.put(`/blog/${id}`, formData, {
         withCredentials: true,
       })
       if (res.data.success) {
         toast.success(res.data.message)
-      
-      }
-    } catch (error) {
+        if (res.data.Blog) {
+          dispatch(setYourBlog(blog.map(item => item._id === id ? res.data.Blog : item)))
+        }
+      }    } catch (error) {
       console.log(error);
-
+      toast.error(error.response?.data?.message || "Failed to update blog")
     } finally {
       setLoading(false)
     }
   }
-  const togglepublish = async (action) => {
+  const togglepublish = async () => {
     try {
-      const res = await axios.patch(`https://blog-spiy.onrender.com/api/v1/blog/${id}`, {
-        params: {
-          action
-        },
-        withCredentials: true
-      })
+      const res = await api.patch(`/blog/${id}`, {}, { withCredentials: true })
       if (res.data.success) {
         setpublish(!publish)
         toast.success(res.data.message)
@@ -104,21 +123,21 @@ const UpdateBlog = () => {
       }
     } catch (error) {
       console.log(error)
-      toast.error("failed to update")
+      toast.error(error.response?.data?.message || "Failed to update publish status")
     }
   }
   const deleteblog = async () => {
     try {
-      const res = await axios.delete(`https://blog-spiy.onrender.com/api/v1/blog/delete/${id}`, { withCredentials: true })
+      const res = await api.delete(`/blog/${id}/delete-blog`)
       if (res.data.success) {
         const updatedblog = blog.filter((blogItem) => blogItem._id !== id)
-        dispatch(setBlog(updatedblog))
+        dispatch(setYourBlog(updatedblog))
         toast.success(res.data.message)
         navigate('/dashboard/your-blog')
       }
     } catch (error) {
       console.log(error)
-      toast.error("something went error")
+      toast.error(error.response?.data?.message || "Failed to delete blog")
     }
   }
   return (
@@ -132,7 +151,7 @@ const UpdateBlog = () => {
             }  >
               {selectblog?.isPublished ? "Unpublish" : "Publish"}
             </Button>
-            <Button variant="destructive" onClick={deleteblog}>Remove Course</Button>
+            <Button variant="destructive" onClick={deleteblog}>Delete Blog</Button>
           </div>
           <div className='pt-10'>
             <Label>Title</Label>
@@ -146,14 +165,14 @@ const UpdateBlog = () => {
             <Label>Description</Label>
             <JoditEditor
               ref={editor}
-              value={blogData.description}
+              value={content}
               onChange={newContent => setcontent(newContent)}
               className="jodit_toolbar"
             />
           </div>
           <div>
             <Label>Category</Label>
-            <Select onValueChange={selectCategory} className="dark:border-gray-300">
+            <Select value={blogData.category} onValueChange={selectCategory} className="dark:border-gray-300">
               <SelectTrigger className="w-45">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
@@ -176,15 +195,12 @@ const UpdateBlog = () => {
               onChange={selectThumbnail}
               accept='image/*'
               className="w-fit dark:border-gray-300"
-            >
-              {
-                previewThumbnail && (
-                  <img src={previewThumbnail}
-                    className="w-64 my-2"
-                    alt="Course Thumbnail" />
-                )
-              }
-            </Input>
+            />
+            {previewThumbnail && (
+              <img src={previewThumbnail}
+                className="w-64 my-2"
+                alt="Blog thumbnail" />
+            )}
           </div>
           <div className='flex gap-3'>
             <Button variant="outline" onClick={() => navigate(-1)}>Back</Button>

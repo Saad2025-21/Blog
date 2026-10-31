@@ -6,7 +6,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { LuSend } from "react-icons/lu";
 import { Button } from './ui/button';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import api from '@/lib/axios';
 import { toast } from 'sonner';
 import { setBlog } from '@/redux/blogSlice';
 import { setComment } from '@/redux/commentSlice';
@@ -18,10 +18,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const CommentBox = () => {
   const params = useParams()
+  const navigate = useNavigate()
   const blogId = params.blogId
   const { user } = useSelector(store => store.auth)
   const { comment } = useSelector(store => store.comment)
@@ -47,8 +48,9 @@ const CommentBox = () => {
   useEffect(() => {
     const getAllCommentsOfBlog = async () => {
       try {
-        const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/comment/${blogId}/comment/all`)
-        const data = res.data.comments
+        const res = await api.get(`/comment/${blogId}/comment/all`)
+
+        const data = res.data?.Comments
         dispatch(setComment(data))
       } catch (error) {
         console.log(error);
@@ -56,25 +58,24 @@ const CommentBox = () => {
       }
     }
     getAllCommentsOfBlog()
-  }, [])
+    return () => dispatch(setComment([]))
+  }, [blogId, dispatch])
 
   const commentHandler = async () => {
+    if (!user) {
+      navigate('/login')
+      return
+    }
     if (!content.trim()) {
       toast.error("Comment cannot be empty");
       return;
     }
     try {
 
-      const res = await axios.post(`https://blog-spiy.onrender.com/api/v1/comment/${blogId}/create`, { content: content }, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true
-      });
-     
+      const res = await api.post(`/comment/${blogId}/create`, { content: content });
       if (res.data.success) {
         let updatedCommentData
-    
+
 
         if (comment.length >= 1) {
           updatedCommentData = [...comment, res.data.comment]
@@ -82,52 +83,50 @@ const CommentBox = () => {
           updatedCommentData = [res.data.comment]
         }
         dispatch(setComment(updatedCommentData))
-        const updatedBlogData = blog.map(p =>
-          p._id === selectedBlog._id ? { ...p, comments: updatedCommentData } : p
-        );
+        const updatedBlogData = selectedBlog
+          ? blog.map(p => p._id === selectedBlog._id ? { ...p, comments: updatedCommentData } : p)
+          : blog;
         dispatch(setBlog(updatedBlogData))
         toast.success(res.data.message)
         setcontent("")
       }
     } catch (error) {
       console.log(error);
-      toast.error("comment add nhi hua")
-
+      toast.error(error.response?.data?.message || "Failed to add comment")
+      if (error.response?.status === 401) navigate('/login')
     }
   }
 
   const deleteComment = async (commentId) => {
     try {
-      const res = await axios.delete(`https://blog-spiy.onrender.com/api/v1/comment/${commentId}/delete`, {
-        withCredentials: true
-      })
+      const res = await api.delete(`/comment/${commentId}/delete`)
       if (res.data.success) {
         const updatedCommentData = comment.filter((item) => item._id !== commentId)
-       
+
 
         dispatch(setComment(updatedCommentData))
+        if (selectedBlog) {
+          const updatedBlogData = blog.map(p => p._id === selectedBlog._id
+            ? { ...p, comments: updatedCommentData }
+            : p)
+          dispatch(setBlog(updatedBlogData))
+        }
         toast.success(res.data.message)
       }
     } catch (error) {
       console.log(error);
-      toast.error("comment delete nhi hua bhai")
+      toast.error("Failed to delete comment")
 
     }
   }
 
   const editCommentHandler = async (commentId) => {
     try {
-      const res = await axios.put(
-        `https://blog-spiy.onrender.com/api/v1/comment/${commentId}/edit`,
-        { content: editedContent },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
+      const res = await api.put(
+        `/comment/${commentId}/edit`,
+        { content: editedContent }
       );
-      
+
       if (res.data.success) {
         const updatedCommentData = comment.map(item =>
           item._id === commentId ? { ...item, content: editedContent } : item
@@ -145,11 +144,8 @@ const CommentBox = () => {
 
   const likeCommentHandler = async (commentId) => {
     try {
-      const res = await axios.get(
-        `https://blog-spiy.onrender.com/api/v1/comment/${commentId}/like`,
-        {
-          withCredentials: true,
-        }
+      const res = await api.get(
+        `/comment/${commentId}/like`
       );
 
       if (res.data.success) {
@@ -173,10 +169,10 @@ const CommentBox = () => {
     <section className='editorial-comment-box'>
       <div className='comment-composer-author flex gap-4 mb-4 items-center'>
         <Avatar>
-          <AvatarImage src={user.photoUrl} />
+          <AvatarImage src={user?.photoUrl} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <h3 className='font-semibold'>{user.firstname} {user.lastname}</h3>
+        <h3 className='font-semibold'>{user?.firstname} {user?.lastname}</h3>
       </div>
       <div className='comment-composer flex gap-3'>
         <Textarea
@@ -192,7 +188,7 @@ const CommentBox = () => {
         comment.length > 0 ? <div className='editorial-comment-list mt-7 bg-gray-100 dark:bg-gray-800 p-5 rounded-md'>
           {
             comment.map((item, index) => {
-              return <article key={index} className='editorial-comment-item mb-4'>
+              return <article key={item._id || index} className='editorial-comment-item mb-4'>
                 <div className='comment-item-main flex items-center justify-between'>
                   <div className='comment-content-row flex gap-3 items-start'>
                     <Avatar>
@@ -224,11 +220,11 @@ const CommentBox = () => {
                             onClick={() => likeCommentHandler(item._id)}
                           >
                             {
-                              item.likes.includes(user._id)
+                              item.likes?.includes(user?._id)
                                 ? <FaHeart fill='red' />
                                 : <FaRegHeart />
                             }
-                            <span>{item.numberOfLikes}</span>
+                            <span>{item.likes?.length || 0}</span>
                           </div>
 
                         </div>
@@ -240,7 +236,7 @@ const CommentBox = () => {
                     </div>
                   </div>
                   {
-                    user._id === item?.userId?._id ? <DropdownMenu>
+                    user?._id === item?.userId?._id ? <DropdownMenu>
                       <DropdownMenuTrigger><BsThreeDots /></DropdownMenuTrigger>
                       <DropdownMenuContent className="w-45">
                         <DropdownMenuItem onClick={() => {

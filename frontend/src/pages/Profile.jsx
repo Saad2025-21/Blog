@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import axios from 'axios'
+import api from '@/lib/axios'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { setUser } from '../redux/authslice'
@@ -51,26 +51,22 @@ const Profile = () => {
     formdata.append("lastname", input.lastName)
     formdata.append("bio", input.bio)
     formdata.append("occupation", input.occupation)
-    if (input?.file) {
+    if (input.file instanceof File) {
       formdata.append("file", input.file)
     }
     try {
       setloading(true)
-      const res = await axios.put('https://blog-spiy.onrender.com/api/v1/user/profile/update', formdata, {
-        headers: {
-          "Content-Type": "applicaton/json"
-        },
-        withCredentials: true,
-      })
+      const res = await api.put('/user/profile/update', formdata)
   
       if (res.data.success) {
         setopen(false)
         toast.success(res.data.message)
         dispatch(setUser(res.data.user))
+        localStorage.setItem("user", JSON.stringify(res.data.user))
       }
     } catch (error) {
       console.log(error)
-      toast.error(error.response.data.message)
+      toast.error(error.response?.data?.message || "Failed to update profile")
     } finally {
       setloading(false)
     }
@@ -91,7 +87,7 @@ const Profile = () => {
           </div>
           {/* info section */}
           <div>
-            <h1 className='font-bold text-center md:text-start text-4xl mb-7'>Welcome {user?.firstName}!</h1>
+            <h1 className='font-bold text-center md:text-start text-4xl mb-7'>Welcome {user?.firstname}!</h1>
             <p className=''><span className='font-semibold'>Email : </span>{user?.email}</p>
             <div className='flex flex-col gap-2 items-start justify-start my-5'>
               <Label className="">About Me</Label>

@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useNavigate } from 'react-router-dom';
 import { setBlog } from '@/redux/blogSlice';
-import axios from 'axios';
+import api from '@/lib/axios';
 
 const tags = [
   { category: "Animal" },
@@ -21,7 +21,7 @@ const RecentBlog = () => {
   useEffect(() => {
     const getAllPublsihedBlogs = async () => {
       try {
-        const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/blog/getpublished-blog`, { withCredentials: true })
+        const res = await api.get('/blog/getpublished-blog')
         if (res.data.success) {
           dispatch(setBlog(res.data.blogs))
         }
@@ -30,7 +30,7 @@ const RecentBlog = () => {
       }
     }
     getAllPublsihedBlogs()
-  }, [])
+  }, [dispatch])
 
   const openArticle = (id) => navigate(`/blogs/${id}`)
 
@@ -98,8 +98,12 @@ const RecentBlog = () => {
             <p className="editorial-kicker">A few good reads</p>
             <h2>Suggested blogs</h2>
             <ul className="suggested-list">
-              {['The life of lion', 'How do birds fly', 'Plants that glow'].map((title, index) => (
-                <li key={title}><span>{String(index + 1).padStart(2, '0')}</span>{title}</li>
+              {(blog || []).slice(0, 3).map((post, index) => (
+                <li key={post._id}>
+                  <button type="button" onClick={() => openArticle(post._id)}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>{post.title}
+                  </button>
+                </li>
               ))}
             </ul>
           </section>

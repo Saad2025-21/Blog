@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,14 +7,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { MessageSquare } from 'lucide-react'
 import CommentBox from '@/components/CommentBox'
-import axios from 'axios'
+import api from '@/lib/axios'
 import { FaHeart, FaRegHeart } from 'react-icons/fa6'
 import { setBlog } from '@/redux/blogSlice'
 import { toast } from 'sonner'
@@ -27,21 +27,22 @@ const BlogView = () => {
   const { blog } = useSelector(store => store.blog)
   const { user } = useSelector(store => store.auth)
   const selectedBlog = blog.find(blog => blog._id === blogId)
-  const [bloglike, setbloglike] = useState(selectedBlog?.likes.length);
-  const { comment } = useSelector(store => store.comment)
-  const [liked, setLiked] = useState(selectedBlog?.likes.includes(user?._id) || false);
+  const navigate = useNavigate()
+  const bloglike = selectedBlog?.likes?.length || 0
+  const liked = selectedBlog?.likes?.includes(user?._id) || false
   const dispatch = useDispatch()
   const clean = DOMPurify.sanitize(selectedBlog?.description)
 
 
   const likeOrdislikehandler = async () => {
+    if (!user) {
+      navigate('/login')
+      return
+    }
     try {
       const action = liked ? 'dislike' : 'likes'
-      const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/blog/${selectedBlog?._id}/${action}`, { withCredentials: true })
+      const res = await api.get(`/blog/${selectedBlog?._id}/${action}`)
       if (res.data.success) {
-        const updatelike = liked ? bloglike - 1 : bloglike + 1
-        setbloglike(updatelike)
-        setLiked(!liked)
 
         const updatedblog = blog.map(p =>
           p._id === selectedBlog._id ? {
@@ -55,20 +56,27 @@ const BlogView = () => {
         dispatch(setBlog(updatedblog))
       }
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.response?.data?.message || "Failed to update like")
     }
 
   }
 
   const TimeFormat = (isodate) => {
     const date = new Date(isodate)
-    const options = { date: 'numeric', month: 'long', year: 'numeric' }
+    const options = { day: 'numeric', month: 'long', year: 'numeric' }
     const formatteddate = date.toLocaleDateString('en-GB', options)
     return formatteddate
   }
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [])
+    if (!blog.length) {
+      api.get('/blog/getpublished-blog')
+        .then((res) => {
+          if (res.data.success) dispatch(setBlog(res.data.blogs))
+        })
+        .catch((error) => toast.error(error.response?.data?.message || "Failed to load blog"))
+    }
+  }, [blog.length, dispatch])
   return (
     <main className='blog-view-page'>
       <div className='blog-breadcrumb max-w-6xl mx-auto'>
@@ -96,7 +104,7 @@ const BlogView = () => {
       </div>
       {/* Blog Header */}
       <header className="blog-view-header">
-        <p className="editorial-kicker">Nature · Field notes</p>
+        <p className="editorial-kicker">{selectedBlog?.category || "Field notes"}</p>
         <h1 className="text-4xl font-bold tracking-tight mb-4">{selectedBlog?.title}</h1>
         <div className="blog-view-byline flex items-center justify-between flex-wrap gap-4">
           <div className="blog-view-author flex items-center space-x-4">
@@ -105,12 +113,12 @@ const BlogView = () => {
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium">{selectedBlog?.author.firstName} {selectedBlog?.author.lastName}</p>
+              <p className="font-medium">{selectedBlog?.author.firstname} {selectedBlog?.author.lastname}</p>
               <p className="text-sm text-muted-foreground">{selectedBlog?.author.occupation}</p>
             </div>
           </div>
           <div className="text-sm text-muted-foreground">Published on
-            {TimeFormat(selectedBlog?.createdAt)} • 8 min read</div>
+            {TimeFormat(selectedBlog?.createdAt)}</div>
         </div>
       </header>
       {/* Featured Image */}
@@ -128,10 +136,7 @@ const BlogView = () => {
       <div className="blog-view-afterword">
         {/* Tags */}
         <div className="blog-view-tags flex flex-wrap gap-2 mb-8">
-          <Badge variant="secondary">Next.js</Badge>
-          <Badge variant="secondary">React</Badge>
-          <Badge variant="secondary">Web Development</Badge>
-          <Badge variant="secondary">JavaScript</Badge>
+          {selectedBlog?.category && <Badge variant="secondary">{selectedBlog.category}</Badge>}
         </div>
         {/* Engagement */}
         <div className="blog-view-engagement flex items-center justify-between border-y dark:border-gray-800 border-gray-300 py-4 mb-8">
@@ -144,7 +149,7 @@ const BlogView = () => {
             </Button>
             <Button variant="ghost" size="sm" className="flex items-center gap-1">
               <MessageSquare className="h-4 w-4" />
-              <span>{comment.length} Comments</span>
+              <span>{selectedBlog?.comments?.length || 0} Comments</span>
             </Button>
           </div>
         </div>

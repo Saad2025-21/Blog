@@ -24,6 +24,12 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': 'off',
+      'react-hooks/set-state-in-effect': 'off',
     },
+  },
+  {
+    files: ['vite.config.js', 'tailwindcss.config.js'],
+    languageOptions: { globals: globals.node },
   },
 ])

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useState } from "react";
 import { toast } from "sonner";
-import axios from 'axios'
+import api from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "../redux/authslice";
@@ -42,12 +42,7 @@ export default function SignUp() {
 
     try {
       dispatch(setLoading(true))
-      const res = await axios.post('https://blog-spiy.onrender.com/api/v1/user/register', user, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true
-      })
+      const res = await api.post('/user/register', user)
 
       if (res.data.success) {
         navigate('/login')
@@ -55,7 +50,7 @@ export default function SignUp() {
         toast.success(res.data.message)
       }
 
-      
+
       setuser({
         firstname: "",
         lastname: "",
@@ -64,7 +59,7 @@ export default function SignUp() {
       })
     } catch (error) {
       console.log(error)
-      toast.error(error.response.data.message)
+      toast.error(error.response?.data?.message)
     } finally {
       dispatch(setLoading(false))
     }

@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/card'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Table,
   TableBody,
@@ -10,8 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
-import { setBlog } from '@/redux/blogSlice'
+import api from '@/lib/axios'
+import { setYourBlog } from '@/redux/blogSlice'
 import { Edit, Trash2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -21,32 +21,32 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 const YourBlog = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { blog } = useSelector(store => store.blog)
+  const { yourblog: blog } = useSelector(store => store.blog)
 
-  const getOwnBlog = async () => {
+  const getOwnBlog = useCallback(async () => {
     try {
-      const res = await axios.get(`https://blog-spiy.onrender.com/api/v1/blog/get-own-blogs`, { withCredentials: true })
+      const res = await api.get('/blog/get-own-blogs')
       if (res.data.success) {
-        dispatch(setBlog(res.data.blogs))
+        dispatch(setYourBlog(res.data.blogs))
       }
     } catch (error) {
       console.log(error);
 
     }
-  }
+  }, [dispatch])
 
   const formatDate = (value) => {
-    const date = new Date(blog[value].createdAt)
+    const date = new Date(value)
     const formatdate = date.toLocaleDateString("en-GB")
     return formatdate
   }
 
   const deleteBlog = async (id) => {
     try {
-      const res = await axios.delete(`https://blog-spiy.onrender.com/api/v1/blog/${id}/delete-blog`, { withCredentials: true })
+      const res = await api.delete(`/blog/${id}/delete-blog`)
       if (res.data.success) {
         const updatedblog = blog.filter((blogitem) => blogitem._id !== id)
-        dispatch(setBlog(updatedblog))
+        dispatch(setYourBlog(updatedblog))
         toast.success(res.data.message)
       }
     } catch (error) {
@@ -57,7 +57,7 @@ const YourBlog = () => {
 
   useEffect(() => {
     getOwnBlog()
-  }, []);
+  }, [getOwnBlog]);
   return (
     <main className='dashboard-page your-blog-page'>
       <div className='dashboard-page-inner'>
@@ -76,8 +76,8 @@ const YourBlog = () => {
             </TableHeader>
             <TableBody>
               {
-                blog?.map((item, index) => (
-                  <TableRow key={index} >
+                blog?.map((item) => (
+                  <TableRow key={item._id} >
                     <TableCell className="flex gap-4 items-center">
                       <img src={item.thumbnail} className='w-20 rounded-md hidden md:block' />
                       <h1 onClick={() => navigate(`/blogs/${item._id}`)} className='hover:underline cursor-pointer'>{item.title}</h1>
@@ -85,7 +85,7 @@ const YourBlog = () => {
                     <TableCell>
                       {item.category}
                     </TableCell>
-                    <TableCell>{formatDate(index)}</TableCell>
+                    <TableCell>{formatDate(item.createdAt)}</TableCell>
                     <TableCell className="text-center">
 
                       <DropdownMenu>

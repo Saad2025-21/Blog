@@ -7,17 +7,17 @@ const RichTextEditor = () => {
     <CKEditor
       editor={ClassicEditor}
       data="<p>Hello from CKEditor 5!</p>"
-      onReady={(editor) => {
+      onReady={() => {
         console.log('Editor ready');
       }}
-      onChange={(event, editor) => {
-        console.log('Editor content:', editor.getData());
+      onChange={() => {
+        console.log('Editor content changed');
       }}
-      onBlur={(event, editor) => {
-        console.log('Editor blur', editor);
+      onBlur={() => {
+        console.log('Editor blur');
       }}
-      onFocus={(event, editor) => {
-        console.log('Editor focus', editor);
+      onFocus={() => {
+        console.log('Editor focus');
       }}
     />
   );

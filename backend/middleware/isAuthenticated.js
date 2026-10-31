@@ -5,7 +5,7 @@ export const isAuthenticated = async (req, res, next) => {
         const token = req.cookies.token
       
         if (!token) {
-            return res.status(400).json({
+            return res.status(401).json({
                 message: 'User not authorized',
                 success: false
             })
@@ -13,7 +13,7 @@ export const isAuthenticated = async (req, res, next) => {
 
         const decode = jwt.verify(token, process.env.SECRET_KEY)
         if (!decode) {
-            return res.status(400).json({
+            return res.status(401).json({
                 message: 'Invalid token',
                 success: false
             })
@@ -23,6 +23,9 @@ export const isAuthenticated = async (req, res, next) => {
         next()
     } catch (error) {
         console.log(error);
-
+        return res.status(401).json({
+            message: 'Invalid or expired session',
+            success: false
+        })
     }
 }

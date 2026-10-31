@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from "react-redux"
 
-const themeprovider = ({ children }) => {
+const ThemeProvider = ({ children }) => {
     const { theme } = useSelector(state => state.theme)
 
     return (
@@ -13,4 +13,4 @@ const themeprovider = ({ children }) => {
     )
 }
 
-export default themeprovider
+export default ThemeProvider

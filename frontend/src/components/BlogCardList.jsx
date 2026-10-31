@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom'
 
 const BlogCardList = ({ blog }) => {
     const navigate = useNavigate()
-    const date = new Date(blog.createdAt)
-    const formattedDate = date.toLocaleDateString("en-GB");
     return (
         <div className="editorial-blog-list bg-white dark:bg-gray-700 dark:border-gray-600 flex flex-col md:flex-row md:gap-10 p-5 mt-6 border transition-all">
             <div>

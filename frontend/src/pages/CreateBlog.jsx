@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 // import { setBlog } from '@/redux/blogSlice'
-import axios from 'axios'
+import api from '@/lib/axios'
 import { Loader2 } from 'lucide-react'
 import React, { useState } from 'react'
 // import { useDispatch, useSelector } from 'react-redux'
@@ -25,12 +25,8 @@ const CreateBlog = () => {
     const createBlogHandler = async () => {
         try {
            setLoading(true)
-            const res = await axios.post('https://blog-spiy.onrender.com/api/v1/blog/create', { title, category }, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true,
-            })
+            const res = await api.post('/blog/create', { title, category })
+
             if (res.data.success) {
                 const blogId = res.data.Blog?._id  
                 if (!blogId) {
@@ -42,7 +38,7 @@ const CreateBlog = () => {
             }
         } catch (error) {
             console.log(error)
-            toast.error(error.response.data.message)
+            toast.error(error.response?.data?.message || "Failed to create blog")
         } finally {
             setLoading(false)
         }

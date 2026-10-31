@@ -99,10 +99,12 @@ export const login = async (req, res) => {
         success: true,
         message: `Welcome Back! ${user.firstname}`,
         user: {
-          id: user._id,
+          _id: user._id,
           firstname: user.firstname,
           lastname: user.lastname,
-          email: cleanEmail,
+          email: user.email,
+          bio: user.bio,
+          occupation: user.occupation,
           photoUrl: user.photoUrl,
         },
       });

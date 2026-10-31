@@ -5,13 +5,7 @@ import { Navigate } from 'react-router-dom'
 const ProctectedRoute = ({ children }) => {
   const { user } = useSelector(store => store.auth)
 
-  return (
-    <div>
-      {
-        user ? <>{children}</> : <Navigate to="/login" replace />
-      }
-    </div>
-  )
+  return user === null ? <Navigate to="/login" replace /> : <>{children}</>
 }
 
 export default ProctectedRoute
